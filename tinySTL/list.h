@@ -72,7 +72,7 @@ namespace mySTL {
         bool      empty() const { return node == node->next; }
 
         reference front() { return *begin(); }
-        reference back() { return *end(); }
+        reference back() { return *(--end()); }
 
         void push_front(const value_type& val) { insert(begin(), val); }
         void pop_front() { erase(begin()); }
@@ -81,20 +81,20 @@ namespace mySTL {
 
         iterator insert(iterator pos, const value_type& val);
 
-        void merge(list& x);
-
         void remove(const value_type& val);
         void clear();
+        void reverse();
 
         iterator erase(iterator pos);
 
-        void splice(iterator pos, list& x);
+        void splice(iterator pos, list& li);
 
     protected:
         node_ptr getNode() { return node_allocator::allocate(); }
         void     freeNode(node_ptr ptr) { return node_allocator::deallocate(ptr); }
         node_ptr createNode(const T& val = T());
         void     destoryNode(node_ptr ptr);
+        void     transfer(iterator pos, iterator first, iterator last);
     };
 }  // namespace mySTL
 
@@ -192,7 +192,7 @@ namespace mySTL {
         while (first != last) {
             iterator temp = first;
             ++temp;
-            if (first == val)
+            if (first.ptr->data == val)
                 erase(first);
             first = temp;
         }
@@ -210,6 +210,20 @@ namespace mySTL {
         node->next = node;
     }
 
+    template <class T, class Alloc>
+    void list<T, Alloc>::reverse() {
+        if (node->next == node || node->next->next == node) {
+            return;
+        }
+        iterator first = begin();
+        ++first;
+        while (first != end()) {
+            iterator temp = first;
+            ++first;
+            transfer(begin(), temp, first);
+        }
+    }
+
     //返回删除的下一个位置
     template <class T, class Alloc>
     typename list<T, Alloc>::iterator list<T, Alloc>::erase(iterator pos) {
@@ -217,15 +231,30 @@ namespace mySTL {
         node_ptr next_node = pos.ptr->next;
         prev_node->next = next_node;
         next_node->prev = prev_node;
-        destoryNode(pos);
+        destoryNode(pos.ptr);
         return iterator(next_node);
     }
 
+    //将[first,last)移动到pos之前
     template <class T, class Alloc>
-    void list<T, Alloc>::splice(iterator pos, list& x) {}
+    void list<T, Alloc>::transfer(iterator pos, iterator first, iterator last) {
+        if (pos != last) {
+            last.ptr->prev->next = pos.ptr;
+            first.ptr->prev->next = last.ptr;
+            pos.ptr->prev->next = first.ptr;
+            auto temp = pos.ptr->prev;
+            pos.ptr->prev = last.ptr->prev;
+            last.ptr->prev = first.ptr->prev;
+            first.ptr->prev = temp;
+        }
+    }
 
     template <class T, class Alloc>
-    void list<T, Alloc>::merge(list& x) {}
+    void list<T, Alloc>::splice(iterator pos, list<T, Alloc>& li) {
+        if (!li.empty()) {
+            transfer(pos, li.begin(), li.end());
+        }
+    }
 
     //逻辑
     template <class T, class Alloc>
