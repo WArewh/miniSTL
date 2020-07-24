@@ -2,6 +2,7 @@
 
 #include "algorithmTestCase.h"
 #include "allocatorTestCase.h"
+#include "dequeTestCase.h"
 #include "listTestCase.h"
 #include "smartPointerTestCase.h"
 #include "test.h"
@@ -18,6 +19,7 @@ int main() {
     SmartPointerTestCase pointer_case;
     VectorTestCase       vec_case;
     ListTestCase         list_case;
+    DequeTestCase        deq_case;
 
     test.addcase(&alloc_case);
     test.addcase(&algo_case);
@@ -25,6 +27,7 @@ int main() {
     test.addcase(&pointer_case);
     test.addcase(&vec_case);
     test.addcase(&list_case);
+    test.addcase(&deq_case);
 
     test.run();
     return 0;

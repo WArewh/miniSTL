@@ -6,7 +6,8 @@
 namespace mySTL {
     class allocatorTestCase : public TestCase {
         void testAll() override;
-        void testCase1();  //内存泄露
+        void testCase1();
+        void testCase2();
     };
 }  // namespace mySTL
 

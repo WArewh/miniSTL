@@ -44,7 +44,36 @@ namespace mySTL {
 
 namespace mySTL {
 
-    //双向环形链表 reverse有问题
+    // iterator
+
+    template <class T>
+    listIterator<T>& listIterator<T>::operator++() {
+        ptr = ptr->next;
+        return *this;
+    }
+    template <class T>
+    listIterator<T> listIterator<T>::operator++(int) {
+        auto temp = *this;
+        ++*this;
+        return temp;
+    }
+    template <class T>
+    listIterator<T>& listIterator<T>::operator--() {
+        ptr = ptr->prev;
+        return *this;
+    }
+    template <class T>
+    listIterator<T> listIterator<T>::operator--(int) {
+        auto temp = *this;
+        --*this;
+        return temp;
+    }
+}  // namespace mySTL
+
+
+namespace mySTL {
+
+    //双向环形链表 有问题
     template <class T, class Alloc = Allocator<ListNode<T>>>
     class list {
     public:
@@ -102,46 +131,18 @@ namespace mySTL {
     };
 }  // namespace mySTL
 
-namespace mySTL {
-
-    // iterator
-
-    template <class T>
-    listIterator<T>& listIterator<T>::operator++() {
-        ptr = ptr->next;
-        return *this;
-    }
-    template <class T>
-    listIterator<T> listIterator<T>::operator++(int) {
-        auto temp = *this;
-        ++*this;
-        return temp;
-    }
-    template <class T>
-    listIterator<T>& listIterator<T>::operator--() {
-        ptr = ptr->prev;
-        return *this;
-    }
-    template <class T>
-    listIterator<T> listIterator<T>::operator--(int) {
-        auto temp = *this;
-        --*this;
-        return temp;
-    }
-}  // namespace mySTL
-
 
 namespace mySTL {
 
     // list
 
     template <class T, class Alloc>
-    list<T, Alloc>::list() : node(createNode()) {
+    list<T, Alloc>::list() : node(getNode()) {
         node->next = node->prev = node;
     }
 
     template <class T, class Alloc>
-    list<T, Alloc>::list(size_type n, const value_type& val) : node(createNode()) {
+    list<T, Alloc>::list(size_type n, const value_type& val) : node(getNode()) {
         node->next = node->prev = node;
         for (size_type i = 0; i < n; ++i) {
             push_back(val);
@@ -149,7 +150,7 @@ namespace mySTL {
     }
 
     template <class T, class Alloc>
-    list<T, Alloc>::list(const list<T, Alloc>& li) : node(createNode()) {
+    list<T, Alloc>::list(const list<T, Alloc>& li) : node(getNode()) {
         node->next = node->prev = node;
         for (auto iter = li.begin(); iter != li.end(); ++iter) {
             push_back(*iter);
@@ -174,7 +175,7 @@ namespace mySTL {
     template <class T, class Alloc>
     typename list<T, Alloc>::node_ptr list<T, Alloc>::createNode(const T& val) {
         node_ptr ptr = getNode();
-        mySTL::construct(ptr, val);
+        node_allocator::construct(ptr, val);
         return ptr;
     }
     template <class T, class Alloc>

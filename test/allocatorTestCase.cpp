@@ -9,18 +9,28 @@ namespace mySTL {
     void allocatorTestCase::testAll() {
         printf("\nallocatorTestCase start!\n");
         testCase1();
+        testCase2();
         printf("allocatorTestCase pass!\n");
     }
 
     void allocatorTestCase::testCase1() {
-        int cnt = 10000000;
+        using allocator = Allocator<int>;
+        int* ptr[50];
+        for (int i = 0; i < 50; ++i) {
+            for (int j = 0; j < 50; ++j) {
+                ptr[j] = allocator::allocate(i);
+            }
+            for (int j = 0; j < 50; ++j) {
+                allocator::deallocate(ptr[j], i);
+            }
+        }
+    }
 
-        Allocator<int> alloc;
-        for (int i = 0; i < cnt; ++i) {
-            auto ptr = alloc.allocate();
-            alloc.construct(ptr, 10);
-            alloc.destroy(ptr);
-            alloc.deallocate(ptr);
+    void allocatorTestCase::testCase2() {
+        using allocator = Allocator<int*>;
+        for (int i = 0; i < 20; ++i) {
+            auto ptr = allocator::allocate(i);
+            allocator::deallocate(ptr, i);
         }
     }
 }  // namespace mySTL
