@@ -5,7 +5,6 @@
 #include "allocator.h"
 #include "iterator.h"
 
-//双向环形链表
 namespace mySTL {
 
     template <class T>
@@ -40,7 +39,12 @@ namespace mySTL {
         bool operator==(const listIterator<T>& rhs) { return ptr->data == rhs.ptr->data; }
         bool operator!=(const listIterator<T>& rhs) { return ptr->data != rhs.ptr->data; }
     };
+}  // namespace mySTL
 
+
+namespace mySTL {
+
+    //双向环形链表 reverse有问题
     template <class T, class Alloc = Allocator<ListNode<T>>>
     class list {
     public:
@@ -124,6 +128,10 @@ namespace mySTL {
         --*this;
         return temp;
     }
+}  // namespace mySTL
+
+
+namespace mySTL {
 
     // list
 
