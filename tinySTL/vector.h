@@ -113,9 +113,9 @@ namespace mySTL {
 
     //构造，复制，析构
     template <class T, class Alloc>
-    vector<T, Alloc>::vector() : start(0),
-                                 finish(0),
-                                 end_of_storage(0) {}
+    vector<T, Alloc>::vector() : start(nullptr),
+                                 finish(nullptr),
+                                 end_of_storage(nullptr) {}
 
     template <class T, class Alloc>
     vector<T, Alloc>::vector(const size_type n, const value_type& value) {
@@ -209,7 +209,13 @@ namespace mySTL {
     }
     template <class T, class Alloc>
     void vector<T, Alloc>::shrink_to_fit() {
-        data_allocator::deallocate(finish, end_of_storage - finish);
+        //会有问题
+        // data_allocator::deallocate(finish, end_of_storage - finish);
+        // end_of_storage = finish;
+        T* new_start = data_allocator::allocate(size());
+        finish = mySTL::uninitialized_copy(start, finish, new_start);
+        destroyAndDeallocateAll();
+        start = new_start;
         end_of_storage = finish;
     }
 

@@ -42,12 +42,12 @@ namespace mySTL {
         if (vec.size() != 6 || vec.capacity() != 10) {
             error_msg("VectorTestCase::testCase2 stage 2");
         }
-        // reserve
+        // // reserve
         vec.reserve(20);
         if (vec.size() != 6 || vec.capacity() != 20) {
             error_msg("VectorTestCase::testCase2 stage 3");
         }
-        // clear
+        // // clear
         vec.clear();
         if (vec.size() != 0 || vec.capacity() != 20) {
             error_msg("VectorTestCase::testCase2 stage 4");

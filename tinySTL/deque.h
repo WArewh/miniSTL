@@ -24,7 +24,7 @@ namespace mySTL {
 
         map_pointer map;
 
-        dequeIterator() : cur(nullptr), first(nullptr), last(nullptr), map(nullptr) {}
+        dequeIterator(pointer ptr = nullptr) : cur(ptr), first(ptr), last(ptr), map(nullptr) {}
 
         static size_type bufferSize();
         void             setBuffer(map_pointer new_map);
@@ -72,8 +72,6 @@ namespace mySTL {
     template <class T, size_t BufSize>
     typename dequeIterator<T, BufSize>::difference_type
     dequeIterator<T, BufSize>::operator-(const iterator& iter) const {
-        if (map == iter.map)
-            return cur - iter.cur;
         return difference_type(bufferSize()) * (map - iter.map - 1) + (cur - first)
                + (iter.last - iter.cur);
     }
@@ -118,6 +116,7 @@ namespace mySTL {
         } else {
             difference_type map_offset =
                 offset > 0 ? offset / bufsize : -((-offset - 1) / bufsize) - 1;
+            setBuffer(map + map_offset);
             cur = first + offset - map_offset * bufsize;
         }
         return *this;
@@ -183,8 +182,11 @@ namespace mySTL {
     private:
         void createMap(size_type elems);
         void fillMap(size_type n, const T& val);
+        void reallocateMap();
+        void deallocateAll();
 
         size_type bufferSize() { return getBufferSize(BufSize, sizeof(T)); }
+        size_type getMapSize(size_type n) { return n == 0 ? 2 : n * 2; }
 
     public:
         void push_back(const T& val);
@@ -201,7 +203,9 @@ namespace mySTL {
     deque<T, Alloc, BufSize>::deque() : start(),
                                         finish(),
                                         map(nullptr),
-                                        map_size(0) {}
+                                        map_size(0) {
+        createMap(bufferSize());
+    }
     template <class T, class Alloc, size_t BufSize>
     deque<T, Alloc, BufSize>::deque(size_type n, const T& val)
         : start(),
@@ -214,65 +218,124 @@ namespace mySTL {
 
     template <class T, class Alloc, size_t BufSize>
     deque<T, Alloc, BufSize>::~deque() {
-        clear();
-        data_allocator::deallocate(start.first, bufferSize());
+        deallocateAll();
     }
 
     template <class T, class Alloc, size_t BufSize>
-    void deque<T, Alloc, BufSize>::push_back(const T& val) {}
+    void deque<T, Alloc, BufSize>::push_back(const T& val) {
+        if (map[map_size - 1] && finish.cur == map[map_size]) {  //满了
+            reallocateMap();
+        }
+        data_allocator::construct(finish.cur, val);
+        ++finish;
+    }
 
     template <class T, class Alloc, size_t BufSize>
-    void deque<T, Alloc, BufSize>::push_front(const T& val) {}
+    void deque<T, Alloc, BufSize>::push_front(const T& val) {
+        if (map[0] && start.cur == map[0]) {  //满了
+            reallocateMap();
+        }
+        --start;
+        data_allocator::construct(start.cur, val);
+    }
 
     template <class T, class Alloc, size_t BufSize>
-    void deque<T, Alloc, BufSize>::pop_back() {}
+    void deque<T, Alloc, BufSize>::pop_back() {
+        --finish;
+        data_allocator::destroy(finish.cur);
+    }
 
     template <class T, class Alloc, size_t BufSize>
-    void deque<T, Alloc, BufSize>::pop_front() {}
+    void deque<T, Alloc, BufSize>::pop_front() {
+        data_allocator::destroy(start.cur);
+        ++start;
+    }
 
-    //保留一个缓冲区
     template <class T, class Alloc, size_t BufSize>
     void deque<T, Alloc, BufSize>::clear() {
-        size_type bufs = bufferSize();
-        for (map_pointer cur = start.map + 1; cur < finish.map; ++cur) {
-            data_allocator::destroy(*cur, *cur + bufs);
-            data_allocator::deallocate(*cur, bufs);
+        auto bufs = bufferSize();
+        for (size_t i = 0; i < map_size; ++i) {
+            for (auto ptr = map[i]; ptr != map[i] + bufs && ptr; ++ptr) {
+                data_allocator::destroy(ptr);
+            }
         }
-        if (start.map != finish.map) {
-            data_allocator::destroy(start.cur, start.last);
-            data_allocator::destroy(start.first, start.cur);
-            data_allocator::deallocate(finish.first, bufs);
-        } else {
-            data_allocator::destroy(start.cur, start.cur);
-        }
+        start.setBuffer(map + map_size / 2);
+        finish.setBuffer(map + map_size / 2);
+        start.cur = finish.cur = start.first;
     }
 
     template <class T, class Alloc, size_t BufSize>
     void deque<T, Alloc, BufSize>::createMap(size_type elems) {
         size_type bufs = getBufferSize(BufSize, sizeof(T));
         size_type maps = elems / bufs + 1;
-        map_size = mySTL::max((size_type)8, maps + 2);  //最少八个
+        map_size = getMapSize(maps);
         map = map_allocator::allocate(map_size);
 
-        //居中
-        map_pointer temp_start = map + (map_size - maps) / 2;
-        map_pointer temp_finish = temp_start + maps - 1;
-        for (map_pointer cur = temp_start; cur <= temp_finish; ++cur) {
+        for (map_pointer cur = map; cur < map + map_size; ++cur) {
             *cur = data_allocator::allocate(bufs);
         }
-        start.setBuffer(temp_start);
-        finish.setBuffer(temp_finish);
+        start.setBuffer(map + map_size / 2);
+        finish.setBuffer(map + map_size / 2);
         start.cur = start.first;
-        finish.cur = finish.first + elems % bufs;
+        finish.cur = finish.first;
     }
 
     template <class T, class Alloc, size_t BufSize>
     void deque<T, Alloc, BufSize>::fillMap(size_type n, const T& val) {
-        size_type bufs = bufferSize();
-        for (map_pointer cur = start.map; cur < finish.map; ++cur) {
-            mySTL::fill(*cur, *cur + bufs, val);
+        for (size_type i = 0; i < n / 2; ++i) {
+            push_back(val);
         }
-        mySTL::fill(finish.first, finish.cur, val);
+        for (size_type i = n / 2; i < n; ++i) {
+            push_front(val);
+        }
+    }
+
+    template <class T, class Alloc, size_t BufSize>
+    void deque<T, Alloc, BufSize>::reallocateMap() {
+        size_type   new_size = getMapSize(map_size);
+        map_pointer new_map = map_allocator::allocate(new_size);
+        size_type   bufs = bufferSize();
+        size_type   sz = size();
+        size_type   maps = sz / bufs + 1;
+
+        for (size_type i = 0; i < new_size; ++i) {
+            new_map[i] = data_allocator::allocate(bufs);
+        }
+
+        for (size_type i = 0; i < map_size; ++i) {
+            for (size_type j = 0; j < bufs; ++j) {
+                new_map[i + new_size / 4][j] = map[i][j];
+            }
+        }
+
+        iterator mid;
+        mid.setBuffer(map + map_size / 2);
+        mid.cur = mid.first;
+        iterator new_mid;
+        new_mid.setBuffer(new_map + new_size / 2);
+        new_mid.cur = new_mid.first;
+        auto     dis = mid - start;
+        iterator new_start = new_mid - dis;
+        dis = finish - mid;
+        iterator new_finish = new_mid + dis;
+        deallocateAll();
+        map = new_map;
+        map_size = new_size;
+        start = new_start;
+        finish = new_finish;
+    }
+
+    template <class T, class Alloc, size_t BufSize>
+    void deque<T, Alloc, BufSize>::deallocateAll() {
+        auto bufs = bufferSize();
+        for (size_t i = 0; i < map_size; ++i) {
+            for (auto ptr = map[i]; ptr < map[i] + bufs && ptr; ++ptr) {
+                data_allocator::destroy(ptr);
+            }
+            if (map[i])
+                data_allocator::deallocate(map[i], bufs);
+        }
+        map_allocator::deallocate(map, map_size);
     }
 
 }  // namespace mySTL

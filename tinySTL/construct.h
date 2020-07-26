@@ -8,8 +8,8 @@
 namespace mySTL {
 
     template <class T1, class T2>
-    inline void construct(T1* ptr1, const T2& value) {
-        new (ptr1) T1(value);
+    inline void construct(T1* ptr, const T2& value) {
+        new (ptr) T1(value);
     }
 
     template <class T>

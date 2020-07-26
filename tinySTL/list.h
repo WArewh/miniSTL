@@ -137,7 +137,7 @@ namespace mySTL {
     // list
 
     template <class T, class Alloc>
-    list<T, Alloc>::list() : node(getNode()) {
+    list<T, Alloc>::list() : node(createNode()) {
         node->next = node->prev = node;
     }
 
