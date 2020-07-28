@@ -1,7 +1,6 @@
 #ifndef _MYSTL_ALGORITHMTESTCASE_H
 #define _MYSTL_ALGORITHMTESTCASE_H
 
-#include "algorithm.h"
 #include "test.h"
 
 namespace mySTL {

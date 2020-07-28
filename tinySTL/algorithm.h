@@ -94,6 +94,94 @@ namespace mySTL {
     const T& min(const T& a, const T& b) {
         return !(b < a) ? a : b;
     }
+
+    // heap
+
+    template <class RandomAccessIterator, class Distance, class T>
+    void _push_heap(RandomAccessIterator first, Distance hole_index, Distance top_index,
+                    const T val) {
+        Distance parent_index = (hole_index - 1) / 2;
+        while (hole_index > top_index && *(first + parent_index) < val) {
+            *(first + hole_index) = *(first + parent_index);
+            hole_index = parent_index;
+            parent_index = (hole_index - 1) / 2;
+        }
+        *(first + hole_index) = val;
+    }
+
+    template <class RandomAccessIterator, class Distance, class T>
+    inline void push_heap_aux(RandomAccessIterator first, RandomAccessIterator last, Distance*,
+                              T*) {
+        _push_heap(first, Distance(last - first - 1), Distance(0), T(*(last - 1)));
+    }
+
+    template <class RandomAccessIterator>
+    inline void push_heap(RandomAccessIterator first, RandomAccessIterator last) {
+        push_heap_aux(first, last, difference_type(first), value_type(first));
+    }
+
+
+    template <class RandomAccessIterator, class Distance, class T>
+    void _adjust_heap(RandomAccessIterator first, Distance hole_index, Distance len, const T val) {
+        Distance top_index = hole_index;
+        Distance right_index = 2 * (hole_index + 1);  //右孩子
+        while (right_index < len) {
+            if (*(first + right_index) < *(first + right_index - 1)) {  //选大
+                --right_index;
+            }
+            *(first + hole_index) = *(first + right_index);
+            hole_index = right_index;
+            right_index = 2 * (hole_index + 1);
+        }
+        if (right_index == len) {  //没有右孩子
+            *(first + hole_index) = *(first + right_index - 1);
+            hole_index = right_index - 1;
+        }
+        _push_heap(first, hole_index, top_index, val);
+    }
+
+    template <class RandomAccessIterator, class Distance, class T>
+    void _pop_heap(RandomAccessIterator first, RandomAccessIterator last,
+                   RandomAccessIterator result, const T val, Distance*) {
+        *result = *first;
+        _adjust_heap(first, Distance(0), Distance(last - first), val);
+    }
+
+    template <class RandomAccessIterator, class T>
+    inline void pop_heap_aux(RandomAccessIterator first, RandomAccessIterator last, T*) {
+        _pop_heap(first, last - 1, last - 1, T(*(last - 1)), difference_type(first));
+    }
+
+    template <class RandomAccessIterator>
+    inline void pop_heap(RandomAccessIterator first, RandomAccessIterator last) {
+        pop_heap_aux(first, last, value_type(first));
+    }
+
+    template <class RandomAccessIterator>
+    void sort_heap(RandomAccessIterator first, RandomAccessIterator last) {
+        while (last - first > 1) {
+            pop_heap(first, last--);
+        }
+    }
+
+    template <class RandomAccessIterator, class Distance, class T>
+    void _make_heap(RandomAccessIterator first, RandomAccessIterator last, T*, Distance*) {
+        Distance len = last - first;
+        if (len < 2)
+            return;
+
+        Distance index = (len - 2) / 2;  //第一个需要重排的子树头部
+        while (index >= 0) {
+            _adjust_heap(first, index, len, *(first + index));
+            --index;
+        }
+    }
+
+    template <class RandomAccessIterator>
+    inline void make_heap(RandomAccessIterator first, RandomAccessIterator last) {
+        _make_heap(first, last, value_type(first), difference_type(first));
+    }
+
 }  // namespace mySTL
 
 #endif

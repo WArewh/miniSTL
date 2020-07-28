@@ -1,5 +1,7 @@
 #include "algorithmTestCase.h"
 
+#include "algorithm.h"
+
 namespace mySTL {
 
     void AlgorithmTestCase::testAll() {
