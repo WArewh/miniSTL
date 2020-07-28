@@ -54,11 +54,13 @@ namespace mySTL {
 // iterator
 namespace mySTL {
 
-    size_t getBufferSize(size_t n, size_t sz) { return n != 0 ? n : (sz < 512 ? 512 / sz : 1); }
+    static size_t getDequeBufferSize(size_t n, size_t sz) {
+        return n != 0 ? n : (sz < 512 ? 512 / sz : 1);
+    }
 
     template <class T, size_t BufSize>
     inline size_t dequeIterator<T, BufSize>::bufferSize() {
-        return getBufferSize(BufSize, sizeof(T));
+        return getDequeBufferSize(BufSize, sizeof(T));
     }
 
     //设置缓冲区
@@ -185,7 +187,7 @@ namespace mySTL {
         void reallocateMap();
         void deallocateAll();
 
-        size_type bufferSize() { return getBufferSize(BufSize, sizeof(T)); }
+        size_type bufferSize() { return getDequeBufferSize(BufSize, sizeof(T)); }
         size_type getMapSize(size_type n) { return n == 0 ? 2 : n * 2; }
 
     public:
@@ -266,7 +268,7 @@ namespace mySTL {
 
     template <class T, class Alloc, size_t BufSize>
     void deque<T, Alloc, BufSize>::createMap(size_type elems) {
-        size_type bufs = getBufferSize(BufSize, sizeof(T));
+        size_type bufs = getDequeBufferSize(BufSize, sizeof(T));
         size_type maps = elems / bufs + 1;
         map_size = getMapSize(maps);
         map = map_allocator::allocate(map_size);

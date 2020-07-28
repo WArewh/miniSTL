@@ -1,13 +1,13 @@
 #include "heapTestCase.h"
 
-#include "algorithm.h"
+#include "queue.h"
 #include "vector.h"
 
 namespace mySTL {
     void HeapTestCase::testAll() {
         printf("\nHeapTestCase start!\n");
         testCase1();
-        // testCase2();
+        testCase2();
         printf("HeapTestCase pass!\n");
     }
 
@@ -29,6 +29,22 @@ namespace mySTL {
             if (vec[i] != i) {
                 error_msg("HeapTestCase1 stage 2");
             }
+        }
+    }
+    void HeapTestCase::testCase2() {
+        priority_queue<int> q;
+        for (int i = 0; i < 10; ++i) {
+            q.push(i);
+        }
+        if (q.top() != 9 || q.size() != 10) {
+            error_msg("HeapTestCase2 stage 1");
+        }
+
+        for (int i = 9; i >= 0; --i) {
+            if (q.top() != i || q.size() != i + 1) {
+                error_msg("HeapTestCase2 stage 2");
+            }
+            q.pop();
         }
     }
 

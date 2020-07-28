@@ -34,8 +34,10 @@ namespace mySTL {
         vector& operator=(vector&& v);
 
         //迭代器相关
-        iterator begin() { return start; }
-        iterator end() { return finish; }
+        iterator  begin() { return start; }
+        iterator  end() { return finish; }
+        reference front() { return *start; }
+        reference back() { return *(finish - 1); }
 
         //与容量相关
         size_type size() const { return finish - start; }

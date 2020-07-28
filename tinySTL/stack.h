@@ -19,7 +19,7 @@ namespace mySTL {
         void push(const T& val) { return c.push_back(val); }
         void pop() { return c.pop_back(); }
 
-    protected:
+    private:
         Container c;
     };
 }  // namespace mySTL
