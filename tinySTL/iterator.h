@@ -47,7 +47,7 @@ namespace mySTL {
         using value_type = T;
         using difference_type = ptrdiff_t;
         using pointer = const T*;
-        using reference = const T&;
+        using const_reference = const T&;
     };
 
     template <class Iterator>
