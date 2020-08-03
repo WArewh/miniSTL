@@ -5,6 +5,7 @@
 #include "dequeTestCase.h"
 #include "heapTestCase.h"
 #include "listTestCase.h"
+#include "rbTreeTestCase.h"
 #include "smartPointerTestCase.h"
 #include "test.h"
 #include "uninitialTestCase.h"
@@ -22,6 +23,7 @@ int main() {
     ListTestCase         list_case;
     DequeTestCase        deq_case;
     HeapTestCase         heap_case;
+    RBTreeTestCase       rb_case;
 
     test.addcase(&alloc_case);
     test.addcase(&algo_case);
@@ -31,6 +33,7 @@ int main() {
     test.addcase(&list_case);
     test.addcase(&deq_case);
     test.addcase(&heap_case);
+    test.addcase(&rb_case);
 
     test.run();
     return 0;
