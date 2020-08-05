@@ -158,13 +158,15 @@ namespace mySTL {
 }  // namespace mySTL
 
 namespace mySTL {
-    template <class Value, class Compare = less<Value>, class Alloc = Allocator<RBNode<Value>>>
+    template <class Key, class Value, class Compare = less<Value>,
+              class Alloc = Allocator<RBNode<Value>>>
     class RBTree {
     public:
         using value_type = Value;
         using pointer = Value*;
         using reference = Value&;
         using iterator = RBTreeIterator<Value>;
+        using const_iterator = RBTreeIterator<const Value>;
         using const_pointer = const Value*;
         using const_reference = const Value&;
         using size_type = size_t;
@@ -221,8 +223,8 @@ namespace mySTL {
 
 namespace mySTL {
 
-    template <class Value, class Compare, class Alloc>
-    RBTree<Value, Compare, Alloc>::RBTree() {
+    template <class Key, class Value, class Compare, class Alloc>
+    RBTree<Key, Value, Compare, Alloc>::RBTree() {
         header = getNode();
         header->color = RBColor::Red;
         header->parent = nullptr;
@@ -230,15 +232,15 @@ namespace mySTL {
         header->right = header;
     }
 
-    template <class Value, class Compare, class Alloc>
-    RBTree<Value, Compare, Alloc>::~RBTree() {
+    template <class Key, class Value, class Compare, class Alloc>
+    RBTree<Key, Value, Compare, Alloc>::~RBTree() {
         clear();
         destroyNode(header);
     }
 
-    template <class Value, class Compare, class Alloc>
-    typename RBTree<Value, Compare, Alloc>::iterator
-    RBTree<Value, Compare, Alloc>::insert(const value_type& val) {
+    template <class Key, class Value, class Compare, class Alloc>
+    typename RBTree<Key, Value, Compare, Alloc>::iterator
+    RBTree<Key, Value, Compare, Alloc>::insert(const value_type& val) {
         node_pointer node = getRoot();
         node_pointer par = header;
 
@@ -250,15 +252,15 @@ namespace mySTL {
         return insert_aux(node, par, val);
     }
 
-    template <class Value, class Compare, class Alloc>
-    void RBTree<Value, Compare, Alloc>::clear() {
+    template <class Key, class Value, class Compare, class Alloc>
+    void RBTree<Key, Value, Compare, Alloc>::clear() {
         clear_aux(getRoot());
     }
 
-    template <class Value, class Compare, class Alloc>
-    typename RBTree<Value, Compare, Alloc>::iterator
-    RBTree<Value, Compare, Alloc>::insert_aux(node_pointer x, node_pointer y,
-                                              const value_type& val) {
+    template <class Key, class Value, class Compare, class Alloc>
+    typename RBTree<Key, Value, Compare, Alloc>::iterator
+    RBTree<Key, Value, Compare, Alloc>::insert_aux(node_pointer x, node_pointer y,
+                                                   const value_type& val) {
         node_pointer node = x;
         node_pointer par = y;
         node_pointer new_node = createNode(val);
@@ -282,8 +284,8 @@ namespace mySTL {
         return iterator(new_node);
     }
 
-    template <class Value, class Compare, class Alloc>
-    void RBTree<Value, Compare, Alloc>::clear_aux(node_pointer node) {
+    template <class Key, class Value, class Compare, class Alloc>
+    void RBTree<Key, Value, Compare, Alloc>::clear_aux(node_pointer node) {
         if (node == nullptr) {
             return;
         }
@@ -292,32 +294,32 @@ namespace mySTL {
         destroyNode(node);
     }
 
-    template <class Value, class Compare, class Alloc>
-    typename RBTree<Value, Compare, Alloc>::node_pointer
-    RBTree<Value, Compare, Alloc>::createNode(const value_type& val) {
+    template <class Key, class Value, class Compare, class Alloc>
+    typename RBTree<Key, Value, Compare, Alloc>::node_pointer
+    RBTree<Key, Value, Compare, Alloc>::createNode(const value_type& val) {
         node_pointer temp = getNode();
         node_allocator::construct(temp, val);
         return temp;
     }
 
-    template <class Value, class Compare, class Alloc>
-    typename RBTree<Value, Compare, Alloc>::node_pointer
-    RBTree<Value, Compare, Alloc>::destroyNode(node_pointer ptr) {
+    template <class Key, class Value, class Compare, class Alloc>
+    typename RBTree<Key, Value, Compare, Alloc>::node_pointer
+    RBTree<Key, Value, Compare, Alloc>::destroyNode(node_pointer ptr) {
         data_allocator::destroy(&ptr->data);
         node_allocator::deallocate(ptr);
     }
 
     //复制颜色和数据
-    template <class Value, class Compare, class Alloc>
-    typename RBTree<Value, Compare, Alloc>::node_pointer
-    RBTree<Value, Compare, Alloc>::cloneNode(node_pointer ptr) {
+    template <class Key, class Value, class Compare, class Alloc>
+    typename RBTree<Key, Value, Compare, Alloc>::node_pointer
+    RBTree<Key, Value, Compare, Alloc>::cloneNode(node_pointer ptr) {
         node_pointer temp = createNode(ptr);
         temp->color = ptr->color;
         return temp;
     }
 
-    template <class Value, class Compare, class Alloc>
-    void RBTree<Value, Compare, Alloc>::leftRotate(node_pointer x, node_pointer& root) {
+    template <class Key, class Value, class Compare, class Alloc>
+    void RBTree<Key, Value, Compare, Alloc>::leftRotate(node_pointer x, node_pointer& root) {
         node_pointer y = x->right;
         x->right = y->left;
         if (y->left != nullptr) {
@@ -335,8 +337,8 @@ namespace mySTL {
         x->parent = y;
     }
 
-    template <class Value, class Compare, class Alloc>
-    void RBTree<Value, Compare, Alloc>::rightRotate(node_pointer x, node_pointer& root) {
+    template <class Key, class Value, class Compare, class Alloc>
+    void RBTree<Key, Value, Compare, Alloc>::rightRotate(node_pointer x, node_pointer& root) {
         node_pointer y = x->left;
         x->left = y->right;
         if (y->right != nullptr) {
@@ -354,8 +356,8 @@ namespace mySTL {
         x->parent = y;
     }
 
-    template <class Value, class Compare, class Alloc>
-    void RBTree<Value, Compare, Alloc>::reBalance(node_pointer x, node_pointer& root) {
+    template <class Key, class Value, class Compare, class Alloc>
+    void RBTree<Key, Value, Compare, Alloc>::reBalance(node_pointer x, node_pointer& root) {
         while (x != root && x->parent->color == RBColor::Red) {  //父为红
 
             if (x->parent == x->parent->parent->left) {  //父亲是爷爷的左节点

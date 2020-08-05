@@ -36,7 +36,7 @@ namespace mySTL {
         using size_type = typename Container::size_type;
 
     public:
-        priority_queue() : c(), comp() {}
+        priority_queue() : c(), compare() {}
 
         bool      empty() { return c.empty(); }
         size_type size() { return c.size(); }
@@ -47,7 +47,7 @@ namespace mySTL {
 
     private:
         Container c;
-        Compare   comp;
+        Compare   compare;
     };
 }  // namespace mySTL
 
@@ -55,11 +55,11 @@ namespace mySTL {
     template <class T, class Container, class Compare>
     void priority_queue<T, Container, Compare>::push(const T& val) {
         c.push_back(val);
-        push_heap(c.begin(), c.end(), comp);
+        push_heap(c.begin(), c.end(), compare);
     }
     template <class T, class Container, class Compare>
     void priority_queue<T, Container, Compare>::pop() {
-        pop_heap(c.begin(), c.end(), comp);
+        pop_heap(c.begin(), c.end(), compare);
         c.pop_back();
     }
 }  // namespace mySTL

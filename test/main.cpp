@@ -3,6 +3,7 @@
 #include "algorithmTestCase.h"
 #include "allocatorTestCase.h"
 #include "dequeTestCase.h"
+#include "hashTestCase.h"
 #include "heapTestCase.h"
 #include "listTestCase.h"
 #include "rbTreeTestCase.h"
@@ -24,6 +25,7 @@ int main() {
     DequeTestCase        deq_case;
     HeapTestCase         heap_case;
     RBTreeTestCase       rb_case;
+    HashTestCase         hash_case;
 
     test.addcase(&alloc_case);
     test.addcase(&algo_case);

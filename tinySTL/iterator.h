@@ -11,8 +11,8 @@ namespace mySTL {
     struct bidirectional_iterator_tag : public forward_iterator_tag {};        //双向移动读写
     struct random_access_iterator_tag : public bidirectional_iterator_tag {};  //随机读写
 
-    template <class Category, class T, class Distance = ptrdiff_t, class Pointer = T*,
-              class Reference = T&>
+    template <class Category, class T, class Pointer = T*, class Reference = T&,
+              class Distance = ptrdiff_t>
     struct iterator {
         using iterator_category = Category;
         using value_type = T;

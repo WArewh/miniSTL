@@ -16,13 +16,13 @@ namespace mySTL {
     };
 
     template <class T>
-    struct less : public binary_function<T, T, T> {
-        T operator()(const T& x, const T& y) { return x < y; }
+    struct less : public binary_function<T, T, bool> {
+        bool operator()(const T& x, const T& y) { return x < y; }
     };
 
     template <class T>
-    struct greater : public binary_function<T, T, T> {
-        T operator()(const T& x, const T& y) { return x > y; }
+    struct greater : public binary_function<T, T, bool> {
+        bool operator()(const T& x, const T& y) { return x > y; }
     };
 
     template <class T>
