@@ -21,6 +21,11 @@ namespace mySTL {
     };
 
     template <class T>
+    struct greater : public binary_function<T, T, T> {
+        T operator()(const T& x, const T& y) { return x > y; }
+    };
+
+    template <class T>
     struct equal_to : public binary_function<T, T, T> {
         T operator()(const T& x, const T& y) { return x == y; }
     };

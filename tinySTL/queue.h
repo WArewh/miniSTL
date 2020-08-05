@@ -2,6 +2,7 @@
 #define _MYSTL_QUEUE_H
 
 #include "deque.h"
+#include "functional.h"
 #include "vector.h"
 
 namespace mySTL {
@@ -27,7 +28,7 @@ namespace mySTL {
 }  // namespace mySTL
 
 namespace mySTL {
-    template <class T, class Container = vector<T>>
+    template <class T, class Container = vector<T>, class Compare = mySTL::less<T>>
     class priority_queue {
     public:
         using value_type = typename Container::value_type;
@@ -35,7 +36,7 @@ namespace mySTL {
         using size_type = typename Container::size_type;
 
     public:
-        priority_queue() : c() {}
+        priority_queue() : c(), comp() {}
 
         bool      empty() { return c.empty(); }
         size_type size() { return c.size(); }
@@ -46,18 +47,19 @@ namespace mySTL {
 
     private:
         Container c;
+        Compare   comp;
     };
 }  // namespace mySTL
 
 namespace mySTL {
-    template <class T, class Container>
-    void priority_queue<T, Container>::push(const T& val) {
+    template <class T, class Container, class Compare>
+    void priority_queue<T, Container, Compare>::push(const T& val) {
         c.push_back(val);
-        push_heap(c.begin(), c.end());
+        push_heap(c.begin(), c.end(), comp);
     }
-    template <class T, class Container>
-    void priority_queue<T, Container>::pop() {
-        pop_heap(c.begin(), c.end());
+    template <class T, class Container, class Compare>
+    void priority_queue<T, Container, Compare>::pop() {
+        pop_heap(c.begin(), c.end(), comp);
         c.pop_back();
     }
 }  // namespace mySTL
