@@ -14,7 +14,7 @@ namespace mySTL {
         using value_compare = Compare;
 
     private:
-        using tree_type = RBTree<key_type, value_type, Compare, Alloc>;
+        using tree_type = RBTree<key_type, value_type, identity<Key>, Compare, Alloc>;
 
     public:
         using pointer = typename tree_type::pointer;
@@ -39,8 +39,9 @@ namespace mySTL {
         size_type size() { return t.size(); }
         bool      empty() { return t.empty(); }
 
-        iterator insert(const value_type& val) { return t.insert(val); }
-        void     clear() { return t.clear(); }
+        pair<iterator, bool> insert(const value_type& val) { return t.insert_unique(val); }
+
+        void clear() { return t.clear(); }
     };
 
 }  // namespace mySTL

@@ -8,8 +8,10 @@ namespace mySTL {
 
     struct pair {
     public:
-        T1 first;
-        T2 second;
+        using first_type = T1;
+        using second_type = T2;
+        first_type  first;
+        second_type second;
 
     public:
         pair() {}
@@ -29,12 +31,6 @@ namespace mySTL {
         return *this;
     }
 
-
-    template <class U, class V>
-    pair<U, V> make_pair(const U& u, const V& v) {
-        return pair<U, V>(u, v);
-    }
-
     //逻辑比较
     template <class T1, class T2>
     bool operator==(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs) {
@@ -44,6 +40,13 @@ namespace mySTL {
     template <class T1, class T2>
     bool operator!=(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs) {
         return !(lhs == rhs);
+    }
+
+
+
+    template <class U, class V>
+    pair<U, V> make_pair(const U& u, const V& v) {
+        return pair<U, V>(u, v);
     }
 
 }  // namespace mySTL
