@@ -8,7 +8,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "myError.h"
+#include "../wrap.h"
 
 /*
  * 客户端

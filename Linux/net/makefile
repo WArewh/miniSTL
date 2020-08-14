@@ -1,7 +1,10 @@
-OBJS=tcp_server tcp_client
+OBJS=test/simple_server test/simple_client wrap.o
 
-%:%.c
-	gcc -g -o $@ $<
+wrap.o:wrap.c
+	gcc -g -c wrap.c -o wrap.o
+
+test/%:test/%.c wrap.o
+	gcc -g -o $@ $< wrap.o
 	./$@
 
 clean: 
