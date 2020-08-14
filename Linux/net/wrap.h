@@ -1,17 +1,21 @@
-/* wrap.h */
 #ifndef NET_WRAP_H
 #define NET_WRAP_H
 
+#include <arpa/inet.h>
 #include <errno.h>
 #include <netinet/in.h>
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <strings.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <wait.h>
 
 void sys_err(const char* s);
 
-int Accept(int fd, struct sockaddr_in* sa, socklen_t* salenptr);
+int Accept(int fd, struct sockaddr_in* sa, socklen_t* addr_len);
 
 void Bind(int fd, const struct sockaddr_in* sa, socklen_t salen);
 
