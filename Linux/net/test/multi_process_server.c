@@ -10,7 +10,7 @@ void echo(int fd) {
     while (1) {
         ssize_t n = Read(fd, buffer, BUFSIZ);
 
-        if (n == 0) {
+        if (n <= 0) {
 
             close(fd);
             exit(1);

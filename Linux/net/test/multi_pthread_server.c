@@ -12,7 +12,7 @@ void* echo(void* arg) {
     while (1) {
         ssize_t n = Read(fd, buffer, BUFSIZ);
 
-        if (n == 0) {
+        if (n <= 0) {
             break;
         }
 
