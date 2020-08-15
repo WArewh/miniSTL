@@ -2,9 +2,19 @@
 #include "sys/select.h"
 
 /*
- * 多路IO转接借助内核监听
- * 内部使用轮询且不能大于最大文件描述符(1023)
- * 可能出现max_fd很大，但是只有几个连接的情况，导致效率很低
+ * 多路IO转接借助内核监听select
+ * 内部使用轮询且不能大于最大文件描述符个数(1024)
+ * 可能出现max_fd很大，但是只有几个连接的情况，导致效率很低(可优化)
+ * 超过1024需要开子进程
+ * 可跨平台
+ *
+ * poll原理基本同select,epoll的半成品
+ * 使用结构体，可以将监听集合和返回事件集合分离
+ * 拓展监听上限
+ * 不能跨平台
+ *
+ * epoll
+ * 无法直接定位出现事件的描述符(可优化)
  *
  */
 
@@ -32,8 +42,7 @@ void SocketInit(struct sockaddr_in* sock) {
     }
 }
 
-int main() {
-
+void select_server() {
     int listen_fd = Socket(AF_INET, SOCK_STREAM, 0);
     int client_fd, max_fd = listen_fd;
 
@@ -82,5 +91,10 @@ int main() {
         }
     }
     close(listen_fd);
+}
+
+int main() {
+    // select_server();
+
     return 0;
 }
