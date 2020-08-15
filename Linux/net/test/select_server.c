@@ -1,25 +1,10 @@
-#include "../wrap.h"
-#include "sys/select.h"
+#include <sys/select.h>
 
-/*
- * 多路IO转接借助内核监听select
- * 内部使用轮询且不能大于最大文件描述符个数(1024)
- * 可能出现max_fd很大，但是只有几个连接的情况，导致效率很低(可优化)
- * 超过1024需要开子进程
- * 可跨平台
- *
- * poll原理基本同select,epoll的半成品
- * 使用结构体，可以将监听集合和返回事件集合分离
- * 拓展监听上限
- * 不能跨平台
- *
- * epoll
- * 无法直接定位出现事件的描述符(可优化)
- *
- */
+#include "../wrap.h"
 
 const short SERVERPORT = 8000;
 const char* SERVERIP = "127.0.0.1";
+const int   MAXCOUNT = 128;
 
 void echo(int fd, fd_set* set) {
     char    buffer[BUFSIZ];
@@ -42,7 +27,16 @@ void SocketInit(struct sockaddr_in* sock) {
     }
 }
 
-void select_server() {
+/*
+ * select
+ * 多路IO转接借助内核监听
+ * 内部使用轮询且不能大于最大文件描述符个数(1024)
+ * 可能出现max_fd很大，但是只有几个连接的情况，导致效率很低(可优化)
+ * 超过1024需要开子进程
+ * 可跨平台
+ */
+
+int main() {
     int listen_fd = Socket(AF_INET, SOCK_STREAM, 0);
     int client_fd, max_fd = listen_fd;
 
@@ -57,7 +51,7 @@ void select_server() {
 
     Bind(listen_fd, &server_addr, sizeof(server_addr));
 
-    Listen(listen_fd, 128);
+    Listen(listen_fd, MAXCOUNT);
 
     FD_ZERO(&reset_set);
     FD_SET(listen_fd, &reset_set);
@@ -91,10 +85,5 @@ void select_server() {
         }
     }
     close(listen_fd);
-}
-
-int main() {
-    // select_server();
-
     return 0;
 }

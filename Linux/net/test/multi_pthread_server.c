@@ -4,6 +4,7 @@
 
 const short SERVERPORT = 8000;
 const char* SERVERIP = "127.0.0.1";
+const int   MAXCOUNT = 128;
 
 
 void* echo(void* arg) {
@@ -46,7 +47,7 @@ int main() {
 
     Bind(listen_fd, &server_addr, sizeof(server_addr));
 
-    Listen(listen_fd, 128);
+    Listen(listen_fd, MAXCOUNT);
 
     while (1) {
         client_fd = Accept(listen_fd, &client_addr, &client_addr_length);

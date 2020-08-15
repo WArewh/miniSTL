@@ -2,7 +2,7 @@
 
 const short SERVERPORT = 8000;
 const char* SERVERIP = "127.0.0.1";
-
+const int   MAXCOUNT = 128;
 
 void echo(int fd) {
     char buffer[BUFSIZ];
@@ -52,7 +52,7 @@ int main() {
 
     Bind(listen_fd, &server_addr, sizeof(server_addr));
 
-    Listen(listen_fd, 128);
+    Listen(listen_fd, MAXCOUNT);
 
     struct sigaction child_act;
     child_act.sa_handler = CatchChild;

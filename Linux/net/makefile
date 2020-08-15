@@ -2,7 +2,8 @@ OBJS=test/simple_server \
 	 test/simple_client \
 	 test/mps.o test/mps \
 	 test/mts.o test/mts \
-	 test/ms.o test/ms \
+	 test/ss.o test/ss \
+	 test/es.o test/es \
 	 wrap.o
 
 wrap.o:wrap.c
@@ -22,12 +23,19 @@ mps:mps.o wrap.o
 	gcc -o test/mps test/mps.o wrap.o
 	./test/mps
 
-ms.o:test/multiplexer_server.c
-	gcc -g -c $< -o test/ms.o
+ss.o:test/select_server.c
+	gcc -g -c $< -o test/ss.o
 
-ms:ms.o wrap.o
-	gcc -o test/ms test/ms.o wrap.o
-	./test/ms
+ss:ss.o wrap.o
+	gcc -o test/ss test/ss.o wrap.o
+	./test/ss
+
+es.o:test/epoll_server.c
+	gcc -g -c $< -o test/es.o
+
+es:es.o wrap.o
+	gcc -o test/es test/es.o wrap.o
+	./test/es
 
 clean: 
 	rm -rf $(OBJS)
