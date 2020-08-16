@@ -3,7 +3,8 @@ OBJS=test/simple_server \
 	 test/mps.o test/mps \
 	 test/mts.o test/mts \
 	 test/ss.o test/ss \
-	 test/es.o test/es \
+	 test/es1.o test/es1 \
+	 test/es2.o test/es2 \
 	 wrap.o
 
 wrap.o:wrap.c
@@ -30,12 +31,19 @@ ss:ss.o wrap.o
 	gcc -o test/ss test/ss.o wrap.o
 	./test/ss
 
-es.o:test/epoll_server.c
-	gcc -g -c $< -o test/es.o
+es1.o:test/epoll_server1.c
+	gcc -g -c $< -o test/es1.o
 
-es:es.o wrap.o
-	gcc -o test/es test/es.o wrap.o
-	./test/es
+es1:es1.o wrap.o
+	gcc -o test/es1 test/es1.o wrap.o
+	./test/es1
+
+es2.o:test/epoll_server2.c
+	gcc -g -c $< -o test/es2.o
+
+es2:es2.o wrap.o
+	gcc -o test/es2 test/es2.o wrap.o
+	./test/es2
 
 clean: 
 	rm -rf $(OBJS)

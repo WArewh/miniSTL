@@ -7,16 +7,21 @@ const char* SERVERIP = "127.0.0.1";
 const int   MAXCOUNT = 128;
 
 void echo(int tree_fd, struct epoll_event* e) {
-    char    buffer[BUFSIZ];
-    int     fd = e->data.fd;
-    ssize_t n = Read(fd, buffer, BUFSIZ);
-    if (n <= 0) {
-        epoll_ctl(tree_fd, EPOLL_CTL_DEL, fd, NULL);
-        close(fd);
-        return;
+    char buffer[5];
+    int  fd = e->data.fd;
+    while (1) {
+        ssize_t n = Read(fd, buffer, 5);
+        printf("errno=%d n=%ld\n", errno, n);
+        if (n == -1 && errno == EAGAIN) {  //读完一次数据
+            return;
+        } else if (n <= 0) {  //结束或者出错
+            epoll_ctl(tree_fd, EPOLL_CTL_DEL, fd, NULL);
+            close(fd);
+            return;
+        }
+        Write(fd, buffer, n);
+        Write(STDOUT_FILENO, buffer, n);
     }
-    Write(fd, buffer, n);
-    Write(STDOUT_FILENO, buffer, n);
 }
 
 void SocketInit(struct sockaddr_in* sock) {
@@ -27,21 +32,15 @@ void SocketInit(struct sockaddr_in* sock) {
         sys_err("inet_pton error");
     }
 }
-
 /*
- * poll原理基本同select,epoll的半成品
- * 使用结构体，可以将监听集合和返回事件集合分离
- * 拓展了监听上限
- * 不能跨平台
- * 无法直接定位出现事件的描述符(可优化)
- *
  * epoll
  * 使用红黑树完成监听
+ * 触发方式:边缘触发(在添加数据的那一刻触发，因此需要while将所有数据读出)
+ * 边缘触发会出现饥饿的情况(一个端口不断发送数据)
  *
  */
 
 int main() {
-
     int listen_fd = Socket(AF_INET, SOCK_STREAM, 0);
     int client_fd, max_fd = listen_fd;
 
@@ -86,8 +85,13 @@ int main() {
                 client_fd = Accept(listen_fd, &client_addr, &client_addr_length);
 
                 struct epoll_event temp;
-                temp.events = EPOLLIN;
+                // temp.events = EPOLLIN;
+                temp.events = EPOLLIN | EPOLLET;
                 temp.data.fd = client_fd;
+
+                int flag = fcntl(client_fd, F_GETFL);
+                flag |= O_NONBLOCK;
+                fcntl(client_fd, F_SETFL, flag);
 
                 ret = epoll_ctl(tree_fd, EPOLL_CTL_ADD, client_fd, &temp);
                 if (ret == -1) {
