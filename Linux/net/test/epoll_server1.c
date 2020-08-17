@@ -7,9 +7,9 @@ const char* SERVERIP = "127.0.0.1";
 const int   MAXCOUNT = 128;
 
 void echo(int tree_fd, struct epoll_event* e) {
-    char    buffer[BUFSIZ];
+    char    buffer[5];
     int     fd = e->data.fd;
-    ssize_t n = Read(fd, buffer, BUFSIZ);
+    ssize_t n = Read(fd, buffer, 5);
     if (n <= 0) {
         epoll_ctl(tree_fd, EPOLL_CTL_DEL, fd, NULL);
         close(fd);
@@ -40,6 +40,7 @@ void SocketInit(struct sockaddr_in* sock) {
  * 使用红黑树完成监听
  * 触发方式:水平触发(有数据就触发)
  *
+ * 实际上写事件要在读事件后加入监听，这里由于输出在终端上因此省略
  */
 
 int main() {

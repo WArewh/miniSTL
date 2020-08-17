@@ -1,7 +1,7 @@
-OBJS=test/simple_server \
-	 test/simple_client \
+OBJS=test/simps.o test/simps \
+	 test/simpc.o test/simpc \
 	 test/mps.o test/mps \
-	 test/mts.o test/mts \
+	 test/simpc.o test/simpc \
 	 test/ss.o test/ss \
 	 test/es1.o test/es1 \
 	 test/es2.o test/es2 \
@@ -9,6 +9,20 @@ OBJS=test/simple_server \
 
 wrap.o:wrap.c
 	gcc -g -c wrap.c -o $@
+
+simps.o:test/simple_server.c
+	gcc -g -c $< -o test/simps.o
+
+simps:simps.o wrap.o
+	gcc -o test/simps test/simps.o wrap.o
+	./test/simps
+
+simpc.o:test/simple_client.c
+	gcc -g -c $< -o test/simpc.o
+
+simpc:simpc.o wrap.o
+	gcc -o test/simpc test/simpc.o wrap.o
+	./test/simpc
 
 mts.o:test/multi_pthread_server.c
 	gcc -g -c $< -o test/mts.o
