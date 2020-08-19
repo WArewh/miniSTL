@@ -3,9 +3,9 @@
 
 /*
  * 空类，继承它的类不能使用拷贝构造函数和赋值构造函数
- * 空基类优化(Day1)
+ * 空基类优化(chapter 1)
  */
-namespace myNet {
+namespace furry {
     class noncopyable {
     public:
         noncopyable(const noncopyable&) = delete;
@@ -15,6 +15,6 @@ namespace myNet {
         noncopyable() = default;
         ~noncopyable() = default;
     };
-}  // namespace myNet
+}  // namespace furry
 
 #endif

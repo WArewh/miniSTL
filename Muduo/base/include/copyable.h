@@ -1,12 +1,12 @@
 #ifndef BASE_COPYABLE_H_
 #define BASE_COPYABLE_H_
 
-namespace myNet {
+namespace furry {
     class copyable {
     protected:
         copyable() = default;
         ~copyable() = default;
     };
-}  // namespace myNet
+}  // namespace furry
 
 #endif
