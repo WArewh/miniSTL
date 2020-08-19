@@ -25,3 +25,5 @@ objects/tinySTL/%.o:tinySTL/%.cpp
 
 clean:
 	rm -rf objects main
+
+# find . "(" -name "*.c" -or  -name "*.cpp" -or -name "*.h" ")" -print | xargs wc -l

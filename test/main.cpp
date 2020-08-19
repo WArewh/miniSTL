@@ -9,6 +9,7 @@
 #include "rbTreeTestCase.h"
 #include "smartPointerTestCase.h"
 #include "test.h"
+#include "tupleTestCase.h"
 #include "uninitialTestCase.h"
 #include "vectorTestCase.h"
 using namespace mySTL;
@@ -25,7 +26,8 @@ int main() {
     DequeTestCase        deq_case;
     HeapTestCase         heap_case;
     RBTreeTestCase       rb_case;
-    HashTestCase         hash_case;
+    tupleTestCase        tuple_case;
+
 
     test.addcase(&alloc_case);
     test.addcase(&algo_case);
@@ -36,6 +38,7 @@ int main() {
     test.addcase(&deq_case);
     test.addcase(&heap_case);
     test.addcase(&rb_case);
+    test.addcase(&tuple_case);
 
     test.run();
     return 0;
