@@ -5,7 +5,6 @@
 
 namespace mySTL {
 
-
     template <class Arg, class Result>
     struct unary_function {
         using argument_type = Arg;
@@ -54,6 +53,24 @@ namespace mySTL {
         typename Pair::first_type operator()(const Pair& x) const { return x.second; }
     };
 
+}  // namespace mySTL
+
+namespace mySTL {
+    // function简单实现
+    template <typename T>
+    class function;
+
+    template <typename Ret, typename... Args>
+    class function<Ret(Args...)> {
+    public:
+        using Func = Ret (*)(Args...);
+        function(Func func) : m_func(func) {}
+
+        Ret operator()(Args... args) { return m_func(args...); }
+
+    private:
+        Func m_func;
+    };
 }  // namespace mySTL
 
 #endif

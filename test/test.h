@@ -8,8 +8,8 @@ namespace mySTL {
     //抽象基类
     class TestCase {
     public:
-        virtual ~TestCase() {}
         virtual void testAll() = 0;
+        virtual ~TestCase() {}
     };
 
     class Test {
