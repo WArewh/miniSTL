@@ -16,5 +16,34 @@ read-copy-update
 ### 安全的单例模式
 双检查锁由于指令重排可能导致失效，可以使用pthread_once保证安全
 
+### 优化策略
+对于读端，用局部变量将共享变量进行拷贝，减小临界区的范围(可能读到的是旧数据)
+对于写端，如果共享变量被独占直接修改，有其他人读写就拷贝一份进行修改
+```
+// 伪代码
+class foo;
+shared_ptr<vector<foo>>global_foo_vec_ptr;
+mutexLock mutex;
+
+void printAll(){
+    shared_ptr<vector<foo>>temp_foo_vec_ptr;
+    {
+        mutexLockGuard lock(mutex);
+        temp_foo_vec_ptr=global_foo_vec_ptr;
+    }
+    // print...
+}
+
+void post(const&foo f){
+    mutexLockGuard lock(mutex);
+    if(!global_foo_vec_ptr.unique()){//没有独占
+        //因为源没有被独占，因此reset后，源没有被销毁，其他已获得源的线程可以继续读，所有线程读完后源销毁
+        global_foo_vec_ptr.reset(new vector<foo>(*global_foo_vec_ptr));//新的源
+    }
+    global_foo_vec_ptr->push_back(f);
+}
+```
+
+
 
 

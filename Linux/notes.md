@@ -48,6 +48,4 @@ init->login->bash
 创建流程:
 fork->setsid->chdir->umask->重定向->逻辑->退出
 
-find . "(" -name "*.c"  -name "*.cpp" -or -name "*.h" ")" -print | xargs wc -l
-
 
