@@ -23,7 +23,8 @@ void SocketInit(struct sockaddr_in* sock) {
     bzero(sock, sizeof(struct sockaddr_in));
     sock->sin_family = AF_INET;
     sock->sin_port = htons(SERVERPORT);
-    if (inet_pton(AF_INET, SERVERIP, &sock->sin_addr.s_addr) < 0 || errno == EAFNOSUPPORT) {
+    if (inet_pton(AF_INET, SERVERIP, &sock->sin_addr.s_addr) < 0
+        || errno == EAFNOSUPPORT) {
         sys_err("inet_pton error");
     }
 }
@@ -86,7 +87,8 @@ int main() {
             if (events[i].data.fd == listen_fd) {
 
                 client_addr_length = sizeof(client_addr);
-                client_fd = Accept(listen_fd, &client_addr, &client_addr_length);
+                client_fd =
+                    Accept(listen_fd, &client_addr, &client_addr_length);
 
                 struct epoll_event temp;
                 temp.events = EPOLLIN;
