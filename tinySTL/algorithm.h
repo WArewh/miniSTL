@@ -29,14 +29,14 @@ namespace mySTL {
 
     template <class InputIterator, class ForwardIterator>
     ForwardIterator _copy_aux(InputIterator first, InputIterator last, ForwardIterator result,
-                              _true_type) {
+                              has_true_type) {
         memmove(result, first, (last - first) * sizeof(*first));
         return result + (last - first);
     }
 
     template <class InputIterator, class ForwardIterator>
     ForwardIterator _copy_aux(InputIterator first, InputIterator last, ForwardIterator result,
-                              _false_type) {
+                              has_false_type) {
         size_t i;
         for (i = 0; first != last; ++first, ++i) {
             mySTL::construct(result + i, *first);

@@ -13,14 +13,14 @@ namespace mySTL {
     void tupleTestCase::testCase1() {
         tuple<int, int, int> t1(1, 2, 3);
         if (tuple_get<0>(t1) != 1 || tuple_get<1>(t1) != 2 || tuple_get<2>(t1) != 3) {
-            error_msg("tupleTestCase::testCase1");
+            error_msg("tupleTestCase::testCase1 stage1");
         }
 
         tuple<int, long, double, float> t2(1, 2, 3.0, 4.0);
 
         if (tuple_get<0>(t2) != 1 || tuple_get<1>(t2) != 2 || tuple_get<2>(t2) != 3.0
             || tuple_get<3>(t2) != 4.0) {
-            error_msg("tupleTestCase::testCase1");
+            error_msg("tupleTestCase::testCase1 stage2");
         }
     }
 

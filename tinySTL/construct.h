@@ -18,10 +18,10 @@ namespace mySTL {
     }
 
     template <class ForwardIterator>
-    inline void _destroy(ForwardIterator first, ForwardIterator last, _true_type) {}
+    inline void _destroy(ForwardIterator first, ForwardIterator last, has_true_type) {}
 
     template <class ForwardIterator>
-    void _destroy(ForwardIterator first, ForwardIterator last, _false_type) {
+    void _destroy(ForwardIterator first, ForwardIterator last, has_false_type) {
         for (; first != last; ++first) {
             destroy(&*first);
         }

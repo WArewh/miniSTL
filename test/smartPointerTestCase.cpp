@@ -8,6 +8,7 @@ namespace mySTL {
         testCase1();
         testCase2();
         testCase3();
+        testCase4();
         printf("SmartPointerTestCase pass!\n");
     }
     void SmartPointerTestCase::testCase1() {
@@ -47,36 +48,21 @@ namespace mySTL {
     }
 
     void SmartPointerTestCase::testCase3() {
-        weak_ptr<int> wp1(new int(10));
-        if (*wp1.get() != *wp1) {
-            error_msg("SmartPointerTestCase::testCase3 stage 1");
-        }
-        weak_ptr<int> wp2(wp1);
-        if (wp2.get() != wp1.get() || wp2.use_count() != 0) {
-            error_msg("SmartPointerTestCase::testCase3 stage 2");
-        }
-        weak_ptr<int> wp3 = wp2;
-        wp3 = wp3;
-        if (wp3.get() != wp2.get() || wp2.use_count() != 0) {
-            error_msg("SmartPointerTestCase::testCase3 stage 3");
-        }
-    }
+        int* iptr = new int(10);
 
-    void SmartPointerTestCase::testCase4() {
-        int*            iptr = new int(10);
         shared_ptr<int> sp1(iptr);
         weak_ptr<int>   wp1(sp1);
-        if (sp1.get() != wp1.get() || sp1.use_count() != 1) {
-            error_msg("SmartPointerTestCase::testCase4 stage 1");
+
+        if (sp1.get() != wp1.get() || sp1.use_count() != 1 || *wp1.get() != 10) {
+            error_msg("SmartPointerTestCase::testCase3 stage 1");
         }
         shared_ptr<int> sp2(new int(5));
         sp1 = sp2;
-        if (wp1.get() != nullptr) {
-            error_msg("SmartPointerTestCase::testCase4 stage 2");
-        }
-        wp1.lock();
-        if (wp1.get() != iptr) {
-            error_msg("SmartPointerTestCase::testCase4 stage 3");
+        if (*sp1 != 5 || sp1.use_count() != 2 || wp1.use_count() != 0 || wp1.lock()) {
+            error_msg("SmartPointerTestCase::testCase3 stage 2");
         }
     }
+
+    void SmartPointerTestCase::testCase4() {}
+
 }  // namespace mySTL

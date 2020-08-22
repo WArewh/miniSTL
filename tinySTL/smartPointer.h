@@ -138,7 +138,7 @@ namespace mySTL {
         using const_pointer = const T*;
         using const_reference = const T&;
 
-        shared_ptr() : m_data(nullptr), m_counter(nullptr) {}
+        shared_ptr() = default;
         explicit shared_ptr(T* data);
         shared_ptr(const shared_ptr<T>& sp);
         shared_ptr(const weak_ptr<T>& wp);
@@ -154,6 +154,8 @@ namespace mySTL {
 
         int  use_count() { return (m_counter != nullptr) ? m_counter->shares : 0; }
         bool unique() { return use_count() == 1; }
+
+        operator bool() { return m_data == nullptr ? false : true; }
 
     private:
         void clean();
@@ -226,12 +228,10 @@ namespace mySTL {
 
         if (m_counter->shares == 0) {
             delete m_data;
-            m_data = nullptr;
-            // std::cout << "delete m_data\n";
+            // printf("delete m_data\n");
             if (m_counter->weaks == 0) {
                 delete m_counter;
-                m_counter = NULL;
-                // std::cout << "delete m_counter\n";
+                // printf("delete m_counter\n");
             }
         }
     }
@@ -252,10 +252,10 @@ namespace mySTL {
         using const_pointer = const T*;
         using const_reference = const T&;
 
-        explicit weak_ptr(T* data);
+        weak_ptr() = default;
         weak_ptr(const weak_ptr<T>& wp);
         weak_ptr(const shared_ptr<T>& sp);
-        weak_ptr& operator=(const weak_ptr<T>& sp);
+        weak_ptr& operator=(const weak_ptr<T>& wp);
         ~weak_ptr() { clean(); }
 
         const pointer   get() const { return m_data; }
@@ -267,6 +267,8 @@ namespace mySTL {
 
         int  use_count() { return (m_counter != nullptr) ? m_counter->shares : 0; }
         bool expired();
+
+        operator bool() { return m_data == nullptr ? false : true; }
 
         shared_ptr<T> lock();
 
@@ -288,15 +290,6 @@ namespace mySTL {
     }
 
     template <class T>
-    weak_ptr<T>::weak_ptr(T* data) : m_data(data),
-                                     m_counter(nullptr) {
-        if (data != nullptr) {
-            m_counter = new counter();
-            m_counter->weaks = 1;
-        }
-    }
-
-    template <class T>
     weak_ptr<T>::weak_ptr(const weak_ptr<T>& wp) : m_data(wp.m_data),
                                                    m_counter(wp.m_counter) {
         if (m_counter != nullptr) {
@@ -313,13 +306,13 @@ namespace mySTL {
     }
 
     template <class T>
-    weak_ptr<T>& weak_ptr<T>::operator=(const weak_ptr<T>& sp) {
-        if (this == &sp) {
+    weak_ptr<T>& weak_ptr<T>::operator=(const weak_ptr<T>& wp) {
+        if (this == &wp) {
             return *this;
         }
         clean();
-        m_data = sp.m_data;
-        m_counter = sp.m_counter;
+        m_data = wp.m_data;
+        m_counter = wp.m_counter;
         if (m_counter != nullptr) {
             ++m_counter->weaks;
         }

@@ -3,8 +3,10 @@
 
 #include "utility.h"
 
-namespace mySTL {
 
+
+namespace mySTL {
+    //仿函数
     template <class Arg, class Result>
     struct unary_function {
         using argument_type = Arg;
@@ -56,7 +58,7 @@ namespace mySTL {
 }  // namespace mySTL
 
 namespace mySTL {
-    // function简单实现
+    // function极简实现
     template <typename T>
     class function;
 
@@ -71,6 +73,23 @@ namespace mySTL {
     private:
         Func m_func;
     };
+
+}  // namespace mySTL
+
+namespace mySTL {
+    // move和forward 实现
+
+    template <typename T>
+    remove_reference_t<T>&& move(remove_reference_t<T>& Arg) {
+        return (static_cast<remove_reference_t<T>&&>(Arg));
+    }
+
+    template <typename T>
+    remove_reference_t<T>&& forward(remove_reference_t<T>&& Arg) {
+        //暂时没有assert
+        return (static_cast<remove_reference_t<T>&&>(Arg));
+    }
+
 }  // namespace mySTL
 
 #endif

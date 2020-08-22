@@ -11,6 +11,7 @@
 #include "smartPointerTestCase.h"
 #include "test.h"
 #include "tupleTestCase.h"
+#include "typeTraitTestCase.h"
 #include "uninitialTestCase.h"
 #include "vectorTestCase.h"
 using namespace mySTL;
@@ -18,6 +19,7 @@ using namespace mySTL;
 int main() {
     Test test;
 
+    typeTraitTestCase    type_case;
     allocatorTestCase    alloc_case;
     AlgorithmTestCase    algo_case;
     UninitialTestCase    uninit_case;
@@ -31,6 +33,7 @@ int main() {
     tupleTestCase        tuple_case;
 
 
+    test.addcase(&type_case);
     test.addcase(&alloc_case);
     test.addcase(&algo_case);
     test.addcase(&uninit_case);
