@@ -29,10 +29,10 @@ section boot vstart=0x7C00
     mov ax, 0x1301
     mov bx, 0x000F
     int     0x10
-    ;读取一个扇区
-    mov eax,loaderStartSection
-    mov bx, loaderBaseAddr 
-    mov cx, 1
+    ;读取多个扇区
+    mov eax,LOADER_START_SECTION
+    mov bx, LOADER_BASE_ADDR 
+    mov cx, 2
     call    read_section
     ; 调整下标位置
     mov ah, 0x02
@@ -47,7 +47,7 @@ section boot vstart=0x7C00
     mov bx, 0x000F
     int     0x10
 
-    jmp     loaderBaseAddr
+    jmp     LOADER_BASE_ADDR
 
 ;读扇区
 read_section:
