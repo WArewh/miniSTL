@@ -40,8 +40,3 @@
 iostream，不适合带格式的数据，且ostringstream会动态分配内存不适合高性能
 在项目中一般不使用iostream，而是自己写一个stream，绕过iostream，可以使用stdio或者snprintf
 
-
-## 源码推荐
-- protobuf
-- leveldb
-
