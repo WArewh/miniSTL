@@ -12,7 +12,7 @@ pthread_setspecific 设置key的value
 # 线程Thread
 start函数调用pthread_create创建线程，线程函数为detail::startThread。
 传递给线程函数的参数data是在heap上分配的，data存放了线程要执行的函数func、线程id、线程name等信息。
-detail::startThread会调用func启动线程，所以detail::startThread可以看成是一个跳板或中介。
+detail::startThread会调用func启动线程，detail::startThread可以看成是一个跳板或中介。
 
 # 线程池ThreadPool
 本质是消费者生产者
