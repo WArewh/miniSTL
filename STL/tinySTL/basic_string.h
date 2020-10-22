@@ -35,6 +35,7 @@ namespace mySTL {
     public:
         basic_string();
         basic_string(const char* str);
+        basic_string(const char* str, size_type length);
         basic_string(const basic_string& str);
         basic_string(basic_string&& str);
         void operator=(const char* str);
@@ -46,8 +47,10 @@ namespace mySTL {
         iterator      begin() { return m_ptr; }
         iterator      end() { return m_ptr + m_length; }
         bool          empty() { return m_length == 0; }
+        size_type     size() const { return m_length; }
         size_type     length() const { return m_length; }
-        const_pointer c_str() { return m_ptr; }
+        const_pointer c_str() const { return m_ptr; }
+        const_pointer data() const { return m_ptr; }
         T&            operator[](size_t i) const { return m_ptr[i]; }  //未处理越界
 
     public:
@@ -98,6 +101,17 @@ namespace mySTL {
         memcpy(m_ptr, str, m_length);
         m_ptr[m_length] = '\0';
     }
+
+    template <typename T, typename Alloc>
+    basic_string<T, Alloc>::basic_string(const char* str, size_type length)
+        : m_ptr(m_buf),
+          m_length(length) {
+        alloc_aux(length);
+        memcpy(m_ptr, str, length);
+        m_ptr[length] = '\0';
+    }
+
+
     template <typename T, typename Alloc>
     basic_string<T, Alloc>::basic_string(const basic_string& str)
         : m_ptr(m_buf),

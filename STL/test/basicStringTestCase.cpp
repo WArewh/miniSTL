@@ -1,14 +1,15 @@
 #include "basicStringTestCase.h"
 
 #include "basic_string.h"
+#include "string_view.h"
 
 namespace mySTL {
     void BasicStringTestCase::testAll() {
         printf("\nBasicStringTestCase start!\n");
         testCase1();
         testCase2();
-        // testCase3();
-        // testCase4();
+        testCase3();
+        testCase4();
         printf("BasicStringTestCase pass!\n");
     }
 
@@ -61,6 +62,11 @@ namespace mySTL {
         if (str9 != str12 || str9.length() != 19 || str11.length() != 0) {
             error_msg("BasicStringTestCase1 stage 9");
         }
+
+        string str13("abcdef", 4);
+        if (str13.length() != 4 || str13 != "abcd") {
+            error_msg("BasicStringTestCase1 stage 10");
+        }
     }
 
     void BasicStringTestCase::testCase2() {
@@ -70,10 +76,17 @@ namespace mySTL {
             str1 += str2;
             str1 += "def";
         }
-        if (str1.length() != 30 || str1 != "abcdefabcdefabcdefabcdefabcdef") {
+        string_view v1(str1.data(), 15);
+        string      str3 = v1.as_string();
+        if (str3.length() != 15 || str3 != "abcdefabcdefabc" || str1.length() != 30
+            || str1 != "abcdefabcdefabcdefabcdefabcdef") {
             error_msg("BasicStringTestCase2 stage 1");
         }
     }
+
+    void BasicStringTestCase::testCase3() {}
+
+    void BasicStringTestCase::testCase4() {}
 
 
 }  // namespace mySTL
