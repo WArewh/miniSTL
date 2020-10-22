@@ -24,7 +24,7 @@ namespace mySTL {
 
         function<int(int, int)> func2(func1);
         if (func2(10, 20) != 30) {
-            error_msg("functionalTestCase::testCase1");
+            error_msg("functionalTestCase::testCase2");
         }
     }
 

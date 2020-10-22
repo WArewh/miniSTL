@@ -203,9 +203,10 @@ namespace mySTL {
 
     protected:
         node_pointer getNode() { return node_allocator::allocate(); }
-        node_pointer destroyNode(node_pointer ptr);
         node_pointer createNode(const value_type& val);
         node_pointer cloneNode(node_pointer ptr);
+
+        void destroyNode(node_pointer ptr);
 
         node_pointer& getRoot() const { return header->parent; }
         node_pointer& leftMost() const { return header->left; }
@@ -341,8 +342,7 @@ namespace mySTL {
     }
 
     template <class Key, class Value, class KeyofValue, class Compare, class Alloc>
-    typename RBTree<Key, Value, KeyofValue, Compare, Alloc>::node_pointer
-    RBTree<Key, Value, KeyofValue, Compare, Alloc>::destroyNode(node_pointer ptr) {
+    void RBTree<Key, Value, KeyofValue, Compare, Alloc>::destroyNode(node_pointer ptr) {
         data_allocator::destroy(&ptr->data);
         node_allocator::deallocate(ptr);
     }

@@ -79,7 +79,7 @@ namespace mySTL {
     }
 
     template <class T>
-    void swap(const T& a, const T& b) {
+    void swap(T& a, T& b) {
         T temp = a;
         a = b;
         b = temp;

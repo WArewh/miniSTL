@@ -58,7 +58,7 @@ namespace mySTL {
 }  // namespace mySTL
 
 namespace mySTL {
-    // function极简实现
+    // function简单实现
     template <typename T>
     class function;
 
@@ -77,16 +77,15 @@ namespace mySTL {
 }  // namespace mySTL
 
 namespace mySTL {
-    // move和forward 实现
+    // move和forward 简单实现
 
     template <typename T>
-    remove_reference_t<T>&& move(remove_reference_t<T>& Arg) {
+    remove_reference_t<T>&& move(T&& Arg) {
         return (static_cast<remove_reference_t<T>&&>(Arg));
     }
 
     template <typename T>
-    remove_reference_t<T>&& forward(remove_reference_t<T>&& Arg) {
-        //暂时没有assert
+    remove_reference_t<T>&& forward(T&& Arg) {
         return (static_cast<remove_reference_t<T>&&>(Arg));
     }
 

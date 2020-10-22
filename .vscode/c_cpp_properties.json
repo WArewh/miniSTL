@@ -2,8 +2,7 @@
     "configurations": [{
         "name": "Linux",
         "includePath": [
-            "${workspaceFolder}/test",
-            "${workspaceFolder}/tinySTL"
+            "${workspaceFolder}/**"
         ],
         "defines": [],
         "compilerPath": "/usr/bin/clang",

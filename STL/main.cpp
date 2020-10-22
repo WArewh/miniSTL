@@ -2,9 +2,9 @@
 
 #include "algorithmTestCase.h"
 #include "allocatorTestCase.h"
+#include "basicStringTestCase.h"
 #include "dequeTestCase.h"
 #include "functionalTestCase.h"
-#include "hashTestCase.h"
 #include "heapTestCase.h"
 #include "listTestCase.h"
 #include "rbTreeTestCase.h"
@@ -31,6 +31,7 @@ int main() {
     HeapTestCase         heap_case;
     RBTreeTestCase       rb_case;
     tupleTestCase        tuple_case;
+    BasicStringTestCase  string_case;
 
 
     test.addcase(&type_case);
@@ -45,6 +46,7 @@ int main() {
     test.addcase(&heap_case);
     test.addcase(&rb_case);
     test.addcase(&tuple_case);
+    test.addcase(&string_case);
 
     test.run();
     return 0;

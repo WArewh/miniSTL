@@ -42,6 +42,9 @@
         "system_error": "cpp",
         "iosfwd": "cpp",
         "stdexcept": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "chrono": "cpp",
+        "thread": "cpp",
+        "functional": "cpp"
     }
 }
