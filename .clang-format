@@ -1,7 +1,11 @@
 #基于那个配置文件
 BasedOnStyle: Google
 Language: Cpp
+<<<<<<< HEAD
 ColumnLimit: 100
+=======
+ColumnLimit: 80
+>>>>>>> Notes/master
 
 BraceWrapping:
  # class定义后面
