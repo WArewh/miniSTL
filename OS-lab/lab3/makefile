@@ -22,4 +22,4 @@ disk_clear:
 	dd if=/dev/zero of=disk bs=512 count=16384
 
 clean:
-	rm -rf main objects
+	rm -rf main objects disk

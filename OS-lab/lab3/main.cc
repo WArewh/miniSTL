@@ -1,6 +1,6 @@
 #include "file_system.h"
 
-Disk disk("/home/wangao/desktop/lab/lab3/disk");
+Disk disk("./disk");
 
 DataManager dmanager;
 IndexManager imanager;

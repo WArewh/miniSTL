@@ -1,6 +1,9 @@
 #include "disk.h"
 Disk::Disk(const char* path) {
     m_disk = fopen(path, "r+");
+    if(m_disk==nullptr){
+        printf("请重新设置path");
+    }
 }
 
 Disk::~Disk() {
