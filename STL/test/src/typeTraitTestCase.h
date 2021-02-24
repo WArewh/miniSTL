@@ -3,8 +3,10 @@
 
 #include "test.h"
 
-namespace mySTL {
-    class typeTraitTestCase : public TestCase {
+namespace mySTL
+{
+    class typeTraitTestCase : public TestCase
+    {
     public:
         void testAll();
         void testCase1();

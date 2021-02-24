@@ -4,15 +4,18 @@
 #include <cstdio>
 #include <vector>
 
-namespace mySTL {
+namespace mySTL
+{
     //抽象基类
-    class TestCase {
+    class TestCase
+    {
     public:
         virtual void testAll() = 0;
         virtual ~TestCase() {}
     };
 
-    class Test {
+    class Test
+    {
     public:
         void run();
         void addcase(TestCase* test_case) { case_vector.push_back(test_case); }

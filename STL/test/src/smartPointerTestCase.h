@@ -3,8 +3,10 @@
 
 #include "test.h"
 
-namespace mySTL {
-    class SmartPointerTestCase : public TestCase {
+namespace mySTL
+{
+    class SmartPointerTestCase : public TestCase
+    {
         void testAll() override;
         void testCase1();  // unique_ptr
         void testCase2();  // shared_ptr

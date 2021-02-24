@@ -4,10 +4,12 @@
 #include "rbTree.h"
 #include "utility.h"
 
-namespace mySTL {
+namespace mySTL
+{
     template <class Key, class Value, class Compare = less<Key>,
               class Alloc = Allocator<RBNode<Key>>>
-    class map {
+    class map
+    {
     public:
         using key_type = Key;
         using data_type = Value;
@@ -37,13 +39,14 @@ namespace mySTL {
         iterator end() { return t.end(); }
 
         size_type size() { return t.size(); }
-        bool      empty() { return t.empty(); }
+        bool empty() { return t.empty(); }
 
         pair<iterator, bool> insert(const value_type& val) { return t.insert_unique(val); }
 
         void clear() { return t.clear(); }
 
-        data_type& operator[](const key_type& key) {
+        data_type& operator[](const key_type& key)
+        {
             return ((*(insert(value_type(key, data_type())).first)).second);
         }
     };

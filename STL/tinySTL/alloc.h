@@ -3,16 +3,18 @@
 
 #include <cstdlib>
 
-namespace mySTL {
+namespace mySTL
+{
     /*
      * 空间配置器(STL源码解析第二章)
      * 使用内存池分配小于128字节的空间
      * 大于128直接使用malloc和free
      */
-    class Alloc {
+    class Alloc
+    {
     public:
         static void* allocate(size_t bytes);
-        static void  deallocate(void* ptr, size_t bytes);
+        static void deallocate(void* ptr, size_t bytes);
         static void* reallocate(void* ptr, size_t old_size, size_t new_size);
 
     private:
@@ -26,14 +28,15 @@ namespace mySTL {
 
     private:
         // free-lists的节点构造
-        union obj {
+        union obj
+        {
             union obj* next;
-            char       client[1];
+            char client[1];
         };
-        static char*  start_free;  // 内存池起始位置
-        static char*  end_free;    // 内存池结束位置
+        static char* start_free;  // 内存池起始位置
+        static char* end_free;    // 内存池结束位置
         static size_t heap_size;
-        static obj*   free_list[FREELISTS];
+        static obj* free_list[FREELISTS];
 
     private:
         //将bytes上调至8的倍数

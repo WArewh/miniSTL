@@ -1,7 +1,7 @@
 {
     "files.associations": {
-<<<<<<< HEAD
-        "type_traits": "cpp",
+        <<
+        << << < HEAD "type_traits": "cpp",
         "iostream": "cpp",
         "climits": "cpp",
         "array": "cpp",
@@ -46,9 +46,9 @@
         "typeinfo": "cpp",
         "chrono": "cpp",
         "thread": "cpp",
-        "functional": "cpp"
-=======
-        "limits": "c",
+        "functional": "cpp" ===
+            === =
+            "limits": "c",
         "cassert": "cpp",
         "cstdio": "cpp",
         "functional": "cpp",
@@ -89,7 +89,7 @@
         "sstream": "cpp",
         "stdexcept": "cpp",
         "streambuf": "cpp",
-        "typeinfo": "cpp"
->>>>>>> Notes/master
+        "typeinfo": "cpp" >>>
+            >>> > Notes / master
     }
 }

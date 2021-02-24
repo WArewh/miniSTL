@@ -7,11 +7,13 @@
 #include "construct.h"
 #include "typeTraits.h"
 
-namespace mySTL {
+namespace mySTL
+{
 
     //空间配置器
     template <class T>
-    class Allocator {
+    class Allocator
+    {
     public:
         using value_type = T;
         using pointer = T*;
@@ -21,8 +23,8 @@ namespace mySTL {
         using size_type = size_t;
         using difference_type = ptrdiff_t;
 
-        static T*   allocate() { return static_cast<T*>(Alloc::allocate(sizeof(T))); }
-        static T*   allocate(size_type n);
+        static T* allocate() { return static_cast<T*>(Alloc::allocate(sizeof(T))); }
+        static T* allocate(size_type n);
         static void deallocate(T* ptr);
         static void deallocate(T* ptr, size_type n);
 
@@ -34,25 +36,30 @@ namespace mySTL {
 }  // namespace mySTL
 
 
-namespace mySTL {
+namespace mySTL
+{
     template <class T>
-    inline T* Allocator<T>::allocate(size_type n) {
+    inline T* Allocator<T>::allocate(size_type n)
+    {
         return n == 0 ? 0 : static_cast<T*>(Alloc::allocate(n * sizeof(T)));
     }
 
     template <class T>
-    inline void Allocator<T>::deallocate(T* ptr) {
+    inline void Allocator<T>::deallocate(T* ptr)
+    {
         Alloc::deallocate(static_cast<void*>(ptr), sizeof(T));
     }
 
     template <class T>
-    inline void Allocator<T>::deallocate(T* ptr, size_type n) {
+    inline void Allocator<T>::deallocate(T* ptr, size_type n)
+    {
         if (n != 0)
             Alloc::deallocate(static_cast<void*>(ptr), n * sizeof(T));
     }
 
     template <class T>
-    inline void Allocator<T>::destroy(T* first, T* last) {
+    inline void Allocator<T>::destroy(T* first, T* last)
+    {
         using trivial_destructor = typename _type_traits<T>::has_trivial_destructor;
         mySTL::_destroy(first, last, trivial_destructor());
     }

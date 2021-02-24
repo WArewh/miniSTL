@@ -3,8 +3,10 @@
 
 #include "test.h"
 
-namespace mySTL {
-    class tupleTestCase : public TestCase {
+namespace mySTL
+{
+    class tupleTestCase : public TestCase
+    {
         void testAll() override;
         void testCase1();
         void testCase2();

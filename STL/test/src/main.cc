@@ -16,22 +16,23 @@
 #include "vectorTestCase.h"
 using namespace mySTL;
 
-int main() {
+int main()
+{
     Test test;
 
-    typeTraitTestCase    type_case;
-    allocatorTestCase    alloc_case;
-    AlgorithmTestCase    algo_case;
-    UninitialTestCase    uninit_case;
+    typeTraitTestCase type_case;
+    allocatorTestCase alloc_case;
+    AlgorithmTestCase algo_case;
+    UninitialTestCase uninit_case;
     SmartPointerTestCase pointer_case;
-    functionalTestCase   func_case;
-    VectorTestCase       vec_case;
-    ListTestCase         list_case;
-    DequeTestCase        deq_case;
-    HeapTestCase         heap_case;
-    RBTreeTestCase       rb_case;
-    tupleTestCase        tuple_case;
-    BasicStringTestCase  string_case;
+    functionalTestCase func_case;
+    VectorTestCase vec_case;
+    ListTestCase list_case;
+    DequeTestCase deq_case;
+    HeapTestCase heap_case;
+    RBTreeTestCase rb_case;
+    tupleTestCase tuple_case;
+    BasicStringTestCase string_case;
 
 
     test.addcase(&type_case);

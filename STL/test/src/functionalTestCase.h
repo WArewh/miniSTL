@@ -3,8 +3,10 @@
 
 #include "test.h"
 
-namespace mySTL {
-    class functionalTestCase : public TestCase {
+namespace mySTL
+{
+    class functionalTestCase : public TestCase
+    {
     public:
         void testAll();
         void testCase1();

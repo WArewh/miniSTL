@@ -3,16 +3,18 @@
 
 #include "deque.h"
 
-namespace mySTL {
+namespace mySTL
+{
     template <class T, class Container = deque<T>>
-    class stack {
+    class stack
+    {
     public:
         using value_type = typename Container::value_type;
         using reference = typename Container::reference;
         using size_type = typename Container::size_type;
 
     public:
-        bool      empty() { return c.empty(); }
+        bool empty() { return c.empty(); }
         size_type size() { return c.size(); }
         reference top() { return c.back(); }
 

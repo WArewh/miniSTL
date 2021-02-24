@@ -1,35 +1,31 @@
-#基于那个配置文件
 BasedOnStyle: Google
 Language: Cpp
-<<<<<<< HEAD
 ColumnLimit: 100
-=======
-ColumnLimit: 80
->>>>>>> Notes/master
 
+# 控制单独的大括号换行
 BraceWrapping:
  # class定义后面
- AfterClass: false
+ AfterClass: true
  # 控制语句后面
- AfterControlStatement:  false
+ AfterControlStatement: true
  # enum定义后面
  AfterEnum:  true
  # 函数定义后面
- AfterFunction:  false
+ AfterFunction:  true
  # 命名空间定义后面
- AfterNamespace: false
+ AfterNamespace: true
  # ObjC定义后面
- AfterObjCDeclaration:   false
+ AfterObjCDeclaration:   true
  # struct定义后面
- AfterStruct:    false
+ AfterStruct:    true
  # union定义后面
- AfterUnion: false
+ AfterUnion: true
  #ExternBlock定义后面
  AfterExternBlock: false
  # catch之前
- BeforeCatch: false
+ BeforeCatch: true
  # else之前
- BeforeElse: false
+ BeforeElse: true
  # 缩进大括号
  IndentBraces: false
  # 分割空函数
@@ -48,7 +44,7 @@ AlignAfterOpenBracket: Align
 # 连续赋值时，对齐所有等号
 AlignConsecutiveAssignments: false
 # 连续声明时，对齐所有声明的变量名
-AlignConsecutiveDeclarations: true
+AlignConsecutiveDeclarations: false
 # 左对齐逃脱换行(使用反斜杠换行)的反斜杠
 AlignEscapedNewlinesLeft: true
 # 水平对齐二元和三元表达式的操作数

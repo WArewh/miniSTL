@@ -6,9 +6,11 @@
 #include "iterator.h"
 
 
-namespace mySTL {
+namespace mySTL
+{
     template <class T, size_t BufSize = 0>
-    struct dequeIterator : public iterator<random_access_iterator_tag, T> {
+    struct dequeIterator : public iterator<random_access_iterator_tag, T>
+    {
         using value_type = T;
         using reference = T&;
         using pointer = T*;
@@ -27,7 +29,7 @@ namespace mySTL {
         dequeIterator(pointer ptr = nullptr) : cur(ptr), first(ptr), last(ptr), map(nullptr) {}
 
         static size_type bufferSize();
-        void             setBuffer(map_pointer new_map);
+        void setBuffer(map_pointer new_map);
 
         reference operator*() const { return *cur; }
         reference operator->() const { return &(operator*()); }
@@ -35,13 +37,13 @@ namespace mySTL {
         difference_type operator-(const iterator& iter) const;
 
         iterator& operator++();
-        iterator  operator++(int);
+        iterator operator++(int);
         iterator& operator--();
-        iterator  operator--(int);
+        iterator operator--(int);
         iterator& operator+=(difference_type n);
-        iterator  operator+(difference_type n);
+        iterator operator+(difference_type n);
         iterator& operator-=(difference_type n);
-        iterator  operator-(difference_type n);
+        iterator operator-(difference_type n);
 
         reference operator[](difference_type n) { return *(*this + n); }
 
@@ -52,20 +54,24 @@ namespace mySTL {
 
 
 // iterator
-namespace mySTL {
+namespace mySTL
+{
 
-    static size_t getDequeBufferSize(size_t n, size_t sz) {
+    static size_t getDequeBufferSize(size_t n, size_t sz)
+    {
         return n != 0 ? n : (sz < 512 ? 512 / sz : 1);
     }
 
     template <class T, size_t BufSize>
-    inline size_t dequeIterator<T, BufSize>::bufferSize() {
+    inline size_t dequeIterator<T, BufSize>::bufferSize()
+    {
         return getDequeBufferSize(BufSize, sizeof(T));
     }
 
     //设置缓冲区
     template <class T, size_t BufSize>
-    void dequeIterator<T, BufSize>::setBuffer(map_pointer new_map) {
+    void dequeIterator<T, BufSize>::setBuffer(map_pointer new_map)
+    {
         map = new_map;
         first = *new_map;
         last = first + (difference_type)bufferSize();
@@ -73,29 +79,35 @@ namespace mySTL {
 
     template <class T, size_t BufSize>
     typename dequeIterator<T, BufSize>::difference_type
-    dequeIterator<T, BufSize>::operator-(const iterator& iter) const {
+    dequeIterator<T, BufSize>::operator-(const iterator& iter) const
+    {
         return difference_type(bufferSize()) * (map - iter.map - 1) + (cur - first)
                + (iter.last - iter.cur);
     }
 
     template <class T, size_t BufSize>
-    typename dequeIterator<T, BufSize>::iterator& dequeIterator<T, BufSize>::operator++() {
+    typename dequeIterator<T, BufSize>::iterator& dequeIterator<T, BufSize>::operator++()
+    {
         ++cur;
-        if (cur == last) {
+        if (cur == last)
+        {
             setBuffer(map + 1);
             cur = first;
         }
         return *this;
     }
     template <class T, size_t BufSize>
-    typename dequeIterator<T, BufSize>::iterator dequeIterator<T, BufSize>::operator++(int) {
+    typename dequeIterator<T, BufSize>::iterator dequeIterator<T, BufSize>::operator++(int)
+    {
         auto temp = *this;
         ++*this;
         return temp;
     }
     template <class T, size_t BufSize>
-    typename dequeIterator<T, BufSize>::iterator& dequeIterator<T, BufSize>::operator--() {
-        if (cur == first) {
+    typename dequeIterator<T, BufSize>::iterator& dequeIterator<T, BufSize>::operator--()
+    {
+        if (cur == first)
+        {
             setBuffer(map - 1);
             cur = last;
         }
@@ -103,19 +115,24 @@ namespace mySTL {
         return *this;
     }
     template <class T, size_t BufSize>
-    typename dequeIterator<T, BufSize>::iterator dequeIterator<T, BufSize>::operator--(int) {
+    typename dequeIterator<T, BufSize>::iterator dequeIterator<T, BufSize>::operator--(int)
+    {
         auto temp = *this;
         --*this;
         return temp;
     }
     template <class T, size_t BufSize>
     typename dequeIterator<T, BufSize>::iterator&
-    dequeIterator<T, BufSize>::operator+=(difference_type n) {
+    dequeIterator<T, BufSize>::operator+=(difference_type n)
+    {
         difference_type offset = n + cur - first;
         difference_type bufsize = (difference_type)bufferSize();
-        if (offset >= 0 && offset < bufsize) {
+        if (offset >= 0 && offset < bufsize)
+        {
             cur += n;
-        } else {
+        }
+        else
+        {
             difference_type map_offset =
                 offset > 0 ? offset / bufsize : -((-offset - 1) / bufsize) - 1;
             setBuffer(map + map_offset);
@@ -125,28 +142,33 @@ namespace mySTL {
     }
     template <class T, size_t BufSize>
     typename dequeIterator<T, BufSize>::iterator
-    dequeIterator<T, BufSize>::operator+(difference_type n) {
+    dequeIterator<T, BufSize>::operator+(difference_type n)
+    {
         auto temp = *this;
         return temp += n;
     }
     template <class T, size_t BufSize>
     typename dequeIterator<T, BufSize>::iterator&
-    dequeIterator<T, BufSize>::operator-=(difference_type n) {
+    dequeIterator<T, BufSize>::operator-=(difference_type n)
+    {
         auto temp = *this;
         return temp += (-n);
     }
     template <class T, size_t BufSize>
     typename dequeIterator<T, BufSize>::iterator
-    dequeIterator<T, BufSize>::operator-(difference_type n) {
+    dequeIterator<T, BufSize>::operator-(difference_type n)
+    {
         auto temp = *this;
         return temp -= n;
     }
 }  // namespace mySTL
 
 
-namespace mySTL {
+namespace mySTL
+{
     template <class T, class Alloc = Allocator<T>, size_t BufSize = 0>
-    class deque {
+    class deque
+    {
     public:
         using value_type = T;
         using reference = T&;
@@ -159,10 +181,10 @@ namespace mySTL {
         using map_allocator = Allocator<T*>;
 
     protected:
-        iterator    start;
-        iterator    finish;
+        iterator start;
+        iterator finish;
         map_pointer map;
-        size_type   map_size;
+        size_type map_size;
 
     public:
         deque();
@@ -170,8 +192,8 @@ namespace mySTL {
         ~deque();
 
     public:
-        iterator       begin() { return start; }
-        iterator       end() { return finish; }
+        iterator begin() { return start; }
+        iterator end() { return finish; }
         const_iterator begin() const { return start; }
         const_iterator end() const { return finish; }
 
@@ -179,7 +201,7 @@ namespace mySTL {
         reference back() { return *(--end()); }
 
         size_type size() { return finish - start; }
-        bool      empty() { return finish == start; }
+        bool empty() { return finish == start; }
 
     private:
         void createMap(size_type elems);
@@ -199,13 +221,15 @@ namespace mySTL {
     };
 }  // namespace mySTL
 
-namespace mySTL {
+namespace mySTL
+{
 
     template <class T, class Alloc, size_t BufSize>
     deque<T, Alloc, BufSize>::deque() : start(),
                                         finish(),
                                         map(nullptr),
-                                        map_size(0) {
+                                        map_size(0)
+    {
         createMap(bufferSize());
     }
     template <class T, class Alloc, size_t BufSize>
@@ -213,19 +237,23 @@ namespace mySTL {
         : start(),
           finish(),
           map(nullptr),
-          map_size(0) {
+          map_size(0)
+    {
         createMap(n);
         fillMap(n, val);
     }
 
     template <class T, class Alloc, size_t BufSize>
-    deque<T, Alloc, BufSize>::~deque() {
+    deque<T, Alloc, BufSize>::~deque()
+    {
         deallocateAll();
     }
 
     template <class T, class Alloc, size_t BufSize>
-    void deque<T, Alloc, BufSize>::push_back(const T& val) {
-        if (map[map_size - 1] && finish.cur == map[map_size]) {  //满了
+    void deque<T, Alloc, BufSize>::push_back(const T& val)
+    {
+        if (map[map_size - 1] && finish.cur == map[map_size])
+        {  //满了
             reallocateMap();
         }
         data_allocator::construct(finish.cur, val);
@@ -233,8 +261,10 @@ namespace mySTL {
     }
 
     template <class T, class Alloc, size_t BufSize>
-    void deque<T, Alloc, BufSize>::push_front(const T& val) {
-        if (map[0] && start.cur == map[0]) {  //满了
+    void deque<T, Alloc, BufSize>::push_front(const T& val)
+    {
+        if (map[0] && start.cur == map[0])
+        {  //满了
             reallocateMap();
         }
         --start;
@@ -242,22 +272,27 @@ namespace mySTL {
     }
 
     template <class T, class Alloc, size_t BufSize>
-    void deque<T, Alloc, BufSize>::pop_back() {
+    void deque<T, Alloc, BufSize>::pop_back()
+    {
         --finish;
         data_allocator::destroy(finish.cur);
     }
 
     template <class T, class Alloc, size_t BufSize>
-    void deque<T, Alloc, BufSize>::pop_front() {
+    void deque<T, Alloc, BufSize>::pop_front()
+    {
         data_allocator::destroy(start.cur);
         ++start;
     }
 
     template <class T, class Alloc, size_t BufSize>
-    void deque<T, Alloc, BufSize>::clear() {
+    void deque<T, Alloc, BufSize>::clear()
+    {
         auto bufs = bufferSize();
-        for (size_t i = 0; i < map_size; ++i) {
-            for (auto ptr = map[i]; ptr != map[i] + bufs && ptr; ++ptr) {
+        for (size_t i = 0; i < map_size; ++i)
+        {
+            for (auto ptr = map[i]; ptr != map[i] + bufs && ptr; ++ptr)
+            {
                 data_allocator::destroy(ptr);
             }
         }
@@ -267,13 +302,15 @@ namespace mySTL {
     }
 
     template <class T, class Alloc, size_t BufSize>
-    void deque<T, Alloc, BufSize>::createMap(size_type elems) {
+    void deque<T, Alloc, BufSize>::createMap(size_type elems)
+    {
         size_type bufs = getDequeBufferSize(BufSize, sizeof(T));
         size_type maps = elems / bufs + 1;
         map_size = getMapSize(maps);
         map = map_allocator::allocate(map_size);
 
-        for (map_pointer cur = map; cur < map + map_size; ++cur) {
+        for (map_pointer cur = map; cur < map + map_size; ++cur)
+        {
             *cur = data_allocator::allocate(bufs);
         }
         start.setBuffer(map + map_size / 2);
@@ -283,29 +320,36 @@ namespace mySTL {
     }
 
     template <class T, class Alloc, size_t BufSize>
-    void deque<T, Alloc, BufSize>::fillMap(size_type n, const T& val) {
-        for (size_type i = 0; i < n / 2; ++i) {
+    void deque<T, Alloc, BufSize>::fillMap(size_type n, const T& val)
+    {
+        for (size_type i = 0; i < n / 2; ++i)
+        {
             push_back(val);
         }
-        for (size_type i = n / 2; i < n; ++i) {
+        for (size_type i = n / 2; i < n; ++i)
+        {
             push_front(val);
         }
     }
 
     template <class T, class Alloc, size_t BufSize>
-    void deque<T, Alloc, BufSize>::reallocateMap() {
-        size_type   new_size = getMapSize(map_size);
+    void deque<T, Alloc, BufSize>::reallocateMap()
+    {
+        size_type new_size = getMapSize(map_size);
         map_pointer new_map = map_allocator::allocate(new_size);
-        size_type   bufs = bufferSize();
-        size_type   sz = size();
-        size_type   maps = sz / bufs + 1;
+        size_type bufs = bufferSize();
+        size_type sz = size();
+        size_type maps = sz / bufs + 1;
 
-        for (size_type i = 0; i < new_size; ++i) {
+        for (size_type i = 0; i < new_size; ++i)
+        {
             new_map[i] = data_allocator::allocate(bufs);
         }
 
-        for (size_type i = 0; i < map_size; ++i) {
-            for (size_type j = 0; j < bufs; ++j) {
+        for (size_type i = 0; i < map_size; ++i)
+        {
+            for (size_type j = 0; j < bufs; ++j)
+            {
                 new_map[i + new_size / 4][j] = map[i][j];
             }
         }
@@ -316,7 +360,7 @@ namespace mySTL {
         iterator new_mid;
         new_mid.setBuffer(new_map + new_size / 2);
         new_mid.cur = new_mid.first;
-        auto     dis = mid - start;
+        auto dis = mid - start;
         iterator new_start = new_mid - dis;
         dis = finish - mid;
         iterator new_finish = new_mid + dis;
@@ -328,10 +372,13 @@ namespace mySTL {
     }
 
     template <class T, class Alloc, size_t BufSize>
-    void deque<T, Alloc, BufSize>::deallocateAll() {
+    void deque<T, Alloc, BufSize>::deallocateAll()
+    {
         auto bufs = bufferSize();
-        for (size_t i = 0; i < map_size; ++i) {
-            for (auto ptr = map[i]; ptr < map[i] + bufs && ptr; ++ptr) {
+        for (size_t i = 0; i < map_size; ++i)
+        {
+            for (auto ptr = map[i]; ptr < map[i] + bufs && ptr; ++ptr)
+            {
                 data_allocator::destroy(ptr);
             }
             if (map[i])

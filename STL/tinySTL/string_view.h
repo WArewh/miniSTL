@@ -5,9 +5,11 @@
 
 #include "basic_string.h"
 
-namespace mySTL {
+namespace mySTL
+{
 
-    class string_view {
+    class string_view
+    {
     public:
         using value_type = char;
         using pointer = char*;
@@ -22,41 +24,48 @@ namespace mySTL {
 
         string_view(const unsigned char* str)
             : m_ptr(reinterpret_cast<const char*>(str)),
-              m_length(static_cast<int>(strlen(m_ptr))) {}
+              m_length(static_cast<int>(strlen(m_ptr)))
+        {
+        }
 
-        string_view(const string& str)
-            : m_ptr(str.data()),
-              m_length(static_cast<int>(str.size())) {}
+        string_view(const string& str) : m_ptr(str.data()), m_length(static_cast<int>(str.size()))
+        {
+        }
 
         string_view(const char* ptr, int len) : m_ptr(ptr), m_length(len) {}
 
         const_pointer data() const { return m_ptr; }
-        size_type     size() const { return m_length; }
-        size_type     length() const { return m_length; }
-        bool          empty() const { return m_length == 0; }
+        size_type size() const { return m_length; }
+        size_type length() const { return m_length; }
+        bool empty() const { return m_length == 0; }
         const_pointer begin() const { return m_ptr; }
         const_pointer end() const { return m_ptr + m_length; }
-        char          operator[](int i) const { return m_ptr[i]; }
+        char operator[](int i) const { return m_ptr[i]; }
 
-        void clear() {
+        void clear()
+        {
             m_ptr = NULL;
             m_length = 0;
         }
-        void set(const char* buffer, int len) {
+        void set(const char* buffer, int len)
+        {
             m_ptr = buffer;
             m_length = len;
         }
-        void set(const char* str) {
+        void set(const char* str)
+        {
             m_ptr = str;
             m_length = static_cast<int>(strlen(str));
         }
 
-        void set(const void* buffer, int len) {
+        void set(const void* buffer, int len)
+        {
             m_ptr = reinterpret_cast<const char*>(buffer);
             m_length = len;
         }
 
-        void remove_prefix(int n) {
+        void remove_prefix(int n)
+        {
             m_ptr += n;
             m_length -= n;
         }
@@ -67,12 +76,14 @@ namespace mySTL {
 
     private:
         const char* m_ptr;
-        int         m_length;
+        int m_length;
     };
 }  // namespace mySTL
 
-namespace mySTL {
-    bool operator==(const string_view& v1, const string_view& v2) {
+namespace mySTL
+{
+    bool operator==(const string_view& v1, const string_view& v2)
+    {
         return ((v1.length() == v2.length()) && (memcmp(v1.data(), v2.data(), v1.length()) == 0));
     }
     bool operator!=(const string_view& v1, const string_view& v2) { return !(v1 == v2); }

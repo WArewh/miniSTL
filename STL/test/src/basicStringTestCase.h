@@ -3,8 +3,10 @@
 
 #include "test.h"
 
-namespace mySTL {
-    class BasicStringTestCase : public TestCase {
+namespace mySTL
+{
+    class BasicStringTestCase : public TestCase
+    {
         void testAll() override;
         void testCase1();
         void testCase2();
