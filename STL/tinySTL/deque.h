@@ -57,7 +57,7 @@ namespace mySTL
 namespace mySTL
 {
 
-    static size_t getDequeBufferSize(size_t n, size_t sz)
+    static inline size_t getDequeBufferSize(size_t n, size_t sz)
     {
         return n != 0 ? n : (sz < 512 ? 512 / sz : 1);
     }
@@ -338,8 +338,6 @@ namespace mySTL
         size_type new_size = getMapSize(map_size);
         map_pointer new_map = map_allocator::allocate(new_size);
         size_type bufs = bufferSize();
-        size_type sz = size();
-        size_type maps = sz / bufs + 1;
 
         for (size_type i = 0; i < new_size; ++i)
         {

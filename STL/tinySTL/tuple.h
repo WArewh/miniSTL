@@ -23,7 +23,7 @@ namespace mySTL
         using base_type = tuple<Types...>;
         using this_type = tuple<T, Types...>;
 
-        tuple(value_type val, Types... base) : value(val), base_type(base...) {}
+        tuple(value_type val, Types... base) : base_type(base...), value(val) {}
 
         const T& head() const { return value; }
         T& head() { return value; }

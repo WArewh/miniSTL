@@ -7,6 +7,10 @@
         "args": [
             "-g",
             "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-Wconversion",
+            "-Wshadow",
             "${file}",
             "-o",
             "${fileDirname}/${fileBasenameNoExtension}",

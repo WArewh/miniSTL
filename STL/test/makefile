@@ -1,4 +1,4 @@
-GPPPARAMS = -I../tinySTL
+GPPPARAMS = -I../tinySTL -Wall
 
 SRC_TEST=$(wildcard src/*.cc)
 SRC_STL=$(wildcard ../tinySTL/*.cc)
